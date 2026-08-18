@@ -191,6 +191,7 @@
         .trade-btn { padding: 10px; border: none; border-radius: 4px; font-weight: 700; color: white; cursor: pointer; font-size: 13px; transition: 0.15s; text-transform: uppercase; letter-spacing: 0.5px; }
         .btn-long { background-color: #00c087; color: #0c0d10; }
         .btn-long:hover { background-color: #00d696; }
+        .btn-long:disabled, .btn-short:disabled { opacity: 0.5; cursor: not-allowed; }
         .btn-short { background-color: #f84960; color: #ffffff; }
         .btn-short:hover { background-color: #ff5c72; }
         #statusBox { background: #0c0d10; padding: 10px; border-radius: 4px; font-size: 11px; color: #848e9c; line-height: 1.4; display: none; margin-top: 6px; border: 1px solid #1e2026; word-break: break-word; }
@@ -611,7 +612,7 @@
                         <div id="slEstBox" style="font-size:11px; color:#5b6472; margin-top:5px; line-height:1.4;"></div>
                     </div>
 
-                    <div class="btn-row"><button class="trade-btn btn-long" onclick="openTrade(true)">LONG</button><button class="trade-btn btn-short" onclick="openTrade(false)">SHORT</button></div>
+                    <div class="btn-row"><button class="trade-btn btn-long" onclick="submitOpenTrade(true)">LONG</button><button class="trade-btn btn-short" onclick="submitOpenTrade(false)">SHORT</button></div>
                     <div id="gmxMarketsStatus" style="display:none; font-size: 11px; margin-top: 8px; line-height: 1.4;"></div>
                     <div id="statusBox"></div>
                 </div>
@@ -845,7 +846,7 @@
             <div class="form-group"><label>Стоп-лосс</label><input type="number" id="tpSlNewSL" placeholder="Цена USDT" oninput="updateTpSlModalEstimates()"></div>
             <div id="tpSlModalSlEst" style="font-size:11px; color:#5b6472; margin:-8px 0 8px; line-height:1.4;"></div>
             <div style="display:flex; gap:8px; margin-top:12px;">
-                <button class="trade-btn btn-long" style="flex:1; padding:8px;" onclick="submitTpSlUpdate()">Сохранить</button>
+                <button class="trade-btn btn-long" id="tpSlSaveBtn" style="flex:1; padding:8px;" onclick="submitTpSlUpdateGuarded()">Сохранить</button>
                 <button class="btn-outline" style="flex:1; padding:8px;" onclick="closeTpSlModal()">Отмена</button>
             </div>
         </div>
@@ -951,7 +952,7 @@
             else if (state === 'ok') { el.style.display = 'none'; }
             else if (state === 'error') {
                 el.style.display = 'block'; el.style.color = '#f84960';
-                el.innerHTML = `Не удалось загрузить рынки GMX: ${detail}. <a href="#" onclick="loadGmxMarkets(); return false;" style="color:#FFC700;">Повторить</a>`;
+                el.innerHTML = `Не удалось загрузить рынки GMX: ${escapeHtml(detail)}. <a href="#" onclick="loadGmxMarkets(); return false;" style="color:#FFC700;">Повторить</a>`;
             }
         }
 
@@ -988,6 +989,18 @@
                     Object.entries(bySymbol).forEach(([symbol, m]) => {
                         GMX_MARKETS[symbol] = { marketAddress: ethers.utils.getAddress(m.marketToken), indexToken: ethers.utils.getAddress(m.indexToken) };
                     });
+
+                    // The sidebar coin list is driven by `cryptoPairs`, which starts out as either
+                    // the hardcoded default or whatever /get_pairs.php returned — neither of which
+                    // necessarily covers every market GMX actually lists. Now that we know the real,
+                    // live set of tradable GMX markets, fold in any symbol that's missing so nothing
+                    // GMX supports is hidden from the list, then re-render so it actually shows up
+                    // (renderCoinList() already ran once before this async call finished).
+                    let addedNewSymbol = false;
+                    Object.keys(GMX_MARKETS).forEach(symbol => {
+                        if (!cryptoPairs.includes(symbol)) { cryptoPairs.push(symbol); addedNewSymbol = true; }
+                    });
+                    if (addedNewSymbol && terminalInitialized) renderCoinList();
 
                     gmxMarketsLoaded = true;
                     setGmxMarketsStatus('ok');
@@ -1373,7 +1386,7 @@
             const notif = document.createElement('div');
             notif.className = 'notif-item';
             const timeInfo = new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
-            notif.innerHTML = `<span class="notif-title">${title}</span><span class="notif-text">${message}</span><span class="notif-time">${timeInfo}</span>`;
+            notif.innerHTML = `<span class="notif-title">${escapeHtml(title)}</span><span class="notif-text">${escapeHtml(message)}</span><span class="notif-time">${timeInfo}</span>`;
             container.prepend(notif);
 
             const dropdown = document.getElementById('notificationDropdown');
@@ -1412,7 +1425,7 @@
             const icon = type === 'error'
                 ? `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f84960" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`
                 : `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00c087" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
-            toast.innerHTML = `${icon}<span>${message}</span>`;
+            toast.innerHTML = `${icon}<span>${escapeHtml(message)}</span>`;
             container.appendChild(toast);
             requestAnimationFrame(() => toast.classList.add('show'));
             const duration = ms || Math.max(4500, message.length * 90); // longer messages get more time
@@ -1638,6 +1651,43 @@
         // rate applies at execution time based on live pool state, so we show the worst case
         // (0.07%) as a clearly-labeled estimate. https://docs.gmx.io/docs/trading/fees/
         const GMX_POSITION_FEE_RATE_ESTIMATE = 0.0007;
+
+        // Neither openTrade() nor closePositionById() below guard against being called twice in
+        // a row — nothing disabled the LONG/SHORT/Close buttons while a wallet prompt or tx was
+        // already in flight, so an impatient double-click could fire two real orders instead of
+        // one. Rather than thread a lock through those two large, already-tested functions (real
+        // risk of breaking something in the process), these thin wrappers own the button
+        // disabling and are what the buttons actually call now — the functions themselves are
+        // untouched.
+        let tradeSubmitInProgress = false;
+        async function submitOpenTrade(isLong) {
+            if (tradeSubmitInProgress) return;
+            tradeSubmitInProgress = true;
+            const longBtn = document.querySelector('.btn-long');
+            const shortBtn = document.querySelector('.btn-short');
+            if (longBtn) longBtn.disabled = true;
+            if (shortBtn) shortBtn.disabled = true;
+            try {
+                await openTrade(isLong);
+            } finally {
+                tradeSubmitInProgress = false;
+                if (longBtn) longBtn.disabled = false;
+                if (shortBtn) shortBtn.disabled = false;
+            }
+        }
+
+        let closeSubmitInProgress = {};
+        async function submitClosePosition(positionId, btn) {
+            if (closeSubmitInProgress[positionId]) return;
+            closeSubmitInProgress[positionId] = true;
+            if (btn) btn.disabled = true;
+            try {
+                await closePositionById(positionId);
+            } finally {
+                closeSubmitInProgress[positionId] = false;
+                if (btn) btn.disabled = false;
+            }
+        }
 
         async function openTrade(isLong) {
             if (!userAddress || (!isDemoMode && !signer)) return showErrorToast("Сначала подключите кошелек!");
@@ -2435,7 +2485,7 @@
                         </div>
                         <div style="display:flex; gap:4px; justify-content:flex-end; align-items:center;">
                             <button class="btn-outline" style="padding: 3px 6px; font-size: 11px;" onclick="openTpSlModal(${p.id})">TP/SL</button>
-                            <button class="btn-outline" style="padding: 3px 8px; font-size: 11px;" onclick="closePositionById(${p.id})">Закрыть</button>
+                            <button class="btn-outline" style="padding: 3px 8px; font-size: 11px;" onclick="submitClosePosition(${p.id}, this)">Закрыть</button>
                             <button class="btn-outline" title="Поделиться" style="padding: 4px; width:24px; height:24px; display:flex; align-items:center; justify-content:center;" onclick="openShareModal(${p.id})">
                                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v13"/><path d="m16 6-4-4-4 4"/><path d="M20 12v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-6"/></svg>
                             </button>
@@ -2588,7 +2638,7 @@
             const p = (window.shareablePositions || {})[positionId];
             if (!p) return;
             const pnlColor = p.pnl >= 0 ? '#00c087' : '#f84960';
-            document.getElementById('shareCardSymbol').innerHTML = `${p.asset}/USDT ${p.isLong ? 'Long' : 'Short'} ${p.leverage}x`;
+            document.getElementById('shareCardSymbol').innerHTML = `${escapeHtml(p.asset)}/USDT ${p.isLong ? 'Long' : 'Short'} ${p.leverage}x`;
             const pnlEl = document.getElementById('shareCardPnl');
             pnlEl.style.color = pnlColor; pnlEl.innerText = `${p.pnl >= 0 ? '+' : ''}${p.pnl.toFixed(2)} USDT`;
             document.getElementById('shareCardEntry').innerText = p.entryPrice.toFixed(4);
@@ -2647,6 +2697,22 @@
         }
 
         function closeTpSlModal() { document.getElementById('tpSlModalOverlay').style.display = 'none'; tpSlEditingPositionId = null; }
+        // Same reasoning as submitOpenTrade/submitClosePosition above — this button could
+        // otherwise be double-clicked while a real on-chain TP/SL order is still being submitted.
+        let tpSlSubmitInProgress = false;
+        async function submitTpSlUpdateGuarded() {
+            if (tpSlSubmitInProgress) return;
+            tpSlSubmitInProgress = true;
+            const btn = document.getElementById('tpSlSaveBtn');
+            if (btn) btn.disabled = true;
+            try {
+                await submitTpSlUpdate();
+            } finally {
+                tpSlSubmitInProgress = false;
+                if (btn) btn.disabled = false;
+            }
+        }
+
         async function submitTpSlUpdate() {
             if (isDemoMode) {
                 const p = demoPositions.find(x => x.id === tpSlEditingPositionId && x.isOpen);
@@ -2950,6 +3016,16 @@
             }
         }
 
+        // escapeHtml: for any dynamic string going into innerHTML that didn't originate as a
+        // hardcoded literal in this file — GMX's own API response fields, get_pairs.php, wallet/
+        // RPC/contract error messages, anything typed by a user. GMX and our own backend are
+        // trusted today, but "trusted API" and "never returns a weird string" aren't the same
+        // guarantee, and a contract can revert with an arbitrary attacker-chosen string — so
+        // nothing external gets to land in the DOM unescaped, regardless of source.
+        function escapeHtml(str) {
+            return String(str).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        }
+
         function renderCoinList() {
             const container = document.getElementById('coinListContainer');
             container.innerHTML = '';
@@ -2957,17 +3033,24 @@
                 const div = document.createElement('div');
                 div.className = `coin-item ${coin === currentSymbol ? 'active' : ''}`;
                 div.id = `coin-card-${coin}`;
-                div.setAttribute('onclick', `updateAsset(this, '${coin}')`);
+                // Was `div.setAttribute('onclick', ...\${coin}...)` — building an inline event
+                // handler by string-interpolating a value that (since cryptoPairs now also gets
+                // filled from GMX's own /markets API, not just our hardcoded defaults) isn't
+                // fully under our control. A symbol containing a stray quote there would have
+                // been literal injected JavaScript, not just a display glitch. addEventListener
+                // with a real closure passes `coin` as a JS value, never as source text, so
+                // there's no string to break out of no matter what characters it contains.
+                div.addEventListener('click', () => updateAsset(div, coin));
                 const chain = iconFallbackChain(coin);
                 const firstIcon = chain.shift();
                 div.innerHTML = `
                     <div class="coin-info-left" style="display:flex; align-items:center; gap:10px;">
-                        <img src="${firstIcon}"
-                             data-fallback-chain='${JSON.stringify(chain)}'
+                        <img src="${escapeHtml(firstIcon)}"
+                             data-fallback-chain='${escapeHtml(JSON.stringify(chain))}'
                              onerror="handleIconError(this)"
                              alt="" style="width:24px; height:24px; border-radius:50%; flex-shrink:0;">
-                        <span class="coin-fallback-icon" style="display:none; width:24px; height:24px; border-radius:50%; background:#2b2f36; color:#FFC700; font-size:11px; font-weight:700; align-items:center; justify-content:center; flex-shrink:0;">${coin.slice(0,2)}</span>
-                        <span class="coin-name" style="font-weight: 600; font-size: 13px;">${coin}/USDT</span>
+                        <span class="coin-fallback-icon" style="display:none; width:24px; height:24px; border-radius:50%; background:#2b2f36; color:#FFC700; font-size:11px; font-weight:700; align-items:center; justify-content:center; flex-shrink:0;">${escapeHtml(coin.slice(0,2))}</span>
+                        <span class="coin-name" style="font-weight: 600; font-size: 13px;">${escapeHtml(coin)}/USDT</span>
                     </div>
                     <span class="coin-price-display font-mono" id="sidebar-price-${coin}" style="font-size: 12px; color: #848e9c;">...</span>`;
                 container.appendChild(div);
@@ -3100,7 +3183,7 @@
             chartBox.innerHTML = `
                 <div style="width:100%; height:100%; display:flex; flex-direction:column;">
                     <div style="padding:8px 12px; color:#848e9c; font-size:11px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #1e2026;">
-                        <span>Упрощённый график ${symbol}/USDT — TradingView недоступен</span>
+                        <span>Упрощённый график ${escapeHtml(symbol)}/USDT — TradingView недоступен</span>
                         <button onclick="retryTradingViewChart()" style="background:none; border:1px solid #2b2f36; color:#848e9c; border-radius:4px; padding:3px 8px; cursor:pointer; font-size:11px;">Повторить TradingView ↻</button>
                     </div>
                     <svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" style="flex:1; width:100%; min-height:0;">
