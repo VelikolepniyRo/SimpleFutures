@@ -390,7 +390,7 @@
                 <div id="eip6963WalletList"></div>
                 <button class="auth-btn social-btn metamask-btn" onclick="connectInjectedWallet('metamask')">🦊 MetaMask</button>
                 <button class="auth-btn social-btn trust-btn" onclick="connectInjectedWallet('trust')">🛡️ Trust Wallet</button>
-                <button class="auth-btn social-btn bitget-btn" onclick="connectInjectedWallet('bitget')">🅱️ Bitget Wallet</button>
+                <button class="auth-btn social-btn bitget-btn" onclick="connectInjectedWallet('bitget')">💠 Bitget Wallet</button>
                 <p style="color:#848e9c; font-size:11px; margin-top:8px; line-height:1.4;" data-i18n="authDisclaimer">Приложение полностью некастодиальное — мы никогда не получаем доступ к вашим приватным ключам. Транзакции подписываются только в вашем кошельке.</p>
 
                 <div class="auth-divider" style="margin-top:20px;" data-i18n="authNoWalletDivider">Без кошелька</div>
@@ -428,7 +428,7 @@
                     <div style="width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
                         <svg viewBox="0 0 100 100" width="22" height="22" xmlns="http://www.w3.org/2000/svg"><path d="M 20 90 L 50 20 L 80 90 M 32 60 L 68 60 M 20 20 L 80 90 M 80 20 L 20 90" fill="none" stroke="#FFC700" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     </div>
-                    <span class="logo-text">SimpleFutures <span style="font-size: 10px; background: #1e2226; color: #FFC700; padding: 2px 6px; border-radius: 3px; font-family: monospace;">ARBITRUM</span><span id="demoHeaderBadge" style="display:none; font-size: 10px; background: #FFC700; color: #0c0d10; padding: 2px 6px; border-radius: 3px; font-family: monospace; margin-left:4px; font-weight:800;">DEMO</span></span>
+                    <span class="logo-text">SimpleFutures <span id="demoHeaderBadge" style="display:none; font-size: 10px; background: #FFC700; color: #0c0d10; padding: 2px 6px; border-radius: 3px; font-family: monospace; margin-left:4px; font-weight:800;">DEMO</span></span>
                 </div>
                 
                 <div class="header-nav">
@@ -457,7 +457,6 @@
                     <span class="lang-switch-opt lang-switch-opt-en">EN</span>
                     <span class="lang-switch-opt lang-switch-opt-ru">RU</span>
                 </div>
-                <div class="px-2 py-1 bg-[#1e2226] rounded text-[10px] text-blue-400 font-mono border border-[#2b2f36]">ARBITRUM ONE</div>
                 <button class="wallet-btn" id="connectBtn" onclick="openAuth()">Подключить кошелек</button>
                 
                 <button class="notification-btn" id="notificationBtn" onclick="toggleNotifications()">
@@ -2901,6 +2900,12 @@
 
         async function resetCurrentSession() {
             provider = null; signer = null; userAddress = null; currentWalletType = null;
+            // Clear any leftover demo-mode state — without this, connecting a real wallet
+            // right after using Demo mode kept isDemoMode=true, so the UI kept showing the
+            // demo balance/badge instead of switching over to the real wallet's data.
+            isDemoMode = false;
+            document.getElementById('resetDemoBtn').style.display = 'none';
+            document.getElementById('demoHeaderBadge').style.display = 'none';
         }
 
         // ---------------------------------------------------------------------------------
