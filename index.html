@@ -418,12 +418,12 @@
                 
                 <div class="header-nav">
                     <a class="header-nav-link active" id="navTrade" onclick="switchTerminalTab('trade')">Trade</a>
-                    <a class="header-nav-link" id="navNews" onclick="switchTerminalTab('news')">Новости</a>
-                    <a class="header-nav-link" id="navFaq" onclick="switchTerminalTab('faq')">FAQ</a>
-                    <a class="header-nav-link" id="navSupport" onclick="openFeedback()">Поддержка</a>
+                    <a class="header-nav-link" id="navNews" onclick="switchTerminalTab('news')" data-i18n="navNews">Новости</a>
+                    <a class="header-nav-link" id="navFaq" onclick="switchTerminalTab('faq')" data-i18n="navFaq">FAQ</a>
+                    <a class="header-nav-link" id="navSupport" onclick="openFeedback()" data-i18n="navSupport">Поддержка</a>
                     
                     <div class="com-dropdown-container">
-                        <a class="header-nav-link" id="navCom" onclick="toggleComDropdown()">Com ▾</a>
+                        <a class="header-nav-link" id="navCom" onclick="toggleComDropdown()" data-i18n="navCom">Com ▾</a>
                         <div class="com-dropdown" id="comDropdown">
                             <a href="https://t.me/simplefutures_ru" target="_blank" class="com-dropdown-item">
                                 <span class="com-dropdown-text">Telegram RU <span class="com-arrow">↗</span></span>
@@ -437,6 +437,7 @@
             </div>
 
             <div class="header-controls">
+                <button id="langToggleBtn" onclick="toggleLanguage()" style="background:#1e2226; border:1px solid #2b2f36; color:#eaecef; font-size:11px; font-weight:700; padding:5px 10px; border-radius:4px; cursor:pointer; font-family:monospace;">EN</button>
                 <div class="px-2 py-1 bg-[#1e2226] rounded text-[10px] text-blue-400 font-mono border border-[#2b2f36]">ARBITRUM ONE</div>
                 <button class="wallet-btn" id="connectBtn" onclick="openAuth()">Подключить кошелек</button>
                 
@@ -487,7 +488,7 @@
 
             <div class="main-layout">
                 <div class="sidebar-left">
-                    <div class="search-container"><input type="text" id="coinSearch" class="search-input" placeholder="Поиск монет..." oninput="filterCoins()"></div>
+                    <div class="search-container"><input type="text" id="coinSearch" class="search-input" placeholder="Поиск монет..." oninput="filterCoins()" data-i18n-placeholder="coinSearchPlaceholder"></div>
                     <div class="coin-list-wrapper" id="coinListContainer"></div>
                 </div>
 
@@ -502,23 +503,23 @@
 
                     <div class="positions-wrapper">
                         <div class="positions-header">
-                            <span class="active" id="tabPositions" onclick="setBottomTab('positions')">Позиции (0)</span>
-                            <span id="tabOrders" onclick="setBottomTab('orders')">Открытые ордера (0)</span>
-                            <span id="tabHistory" onclick="setBottomTab('history')">История ордеров</span>
+                            <span class="active" id="tabPositions" onclick="setBottomTab('positions')" data-count="0">Позиции (0)</span>
+                            <span id="tabOrders" onclick="setBottomTab('orders')" data-count="0">Открытые ордера (0)</span>
+                            <span id="tabHistory" onclick="setBottomTab('history')" data-i18n="tabHistory">История ордеров</span>
                         </div>
                         <div class="positions-content">
                             <table class="table-view active" id="positionsTable">
                                 <thead>
                                     <tr>
-                                        <th>Символ</th>
-                                        <th>Размер</th>
-                                        <th>Входная цена</th>
-                                        <th>Маркировка</th>
-                                        <th>Ликвидация</th>
-                                        <th>Коэф. маржи</th>
-                                        <th>Маржа</th>
-                                        <th>PNL (ROE%)</th>
-                                        <th style="width: 150px;">Действие</th>
+                                        <th data-i18n="thSymbol">Символ</th>
+                                        <th data-i18n="thSize">Размер</th>
+                                        <th data-i18n="thEntryPrice">Входная цена</th>
+                                        <th data-i18n="thMark">Маркировка</th>
+                                        <th data-i18n="thLiq">Ликвидация</th>
+                                        <th data-i18n="thMarginRatio">Коэф. маржи</th>
+                                        <th data-i18n="thMargin">Маржа</th>
+                                        <th data-i18n="thPnl">PNL (ROE%)</th>
+                                        <th style="width: 150px;" data-i18n="thAction">Действие</th>
                                     </tr>
                                 </thead>
                                 <tbody id="positionsTbody"></tbody>
@@ -564,15 +565,15 @@
                 </div>
 
                 <div class="sidebar-right">
-                    <div class="balance-row"><span>Доступно:</span><span class="balance-value font-mono" id="walletBalance" style="color:#eaecef;">0.00 USDT</span></div>
-                    <div class="order-tabs"><button class="tab-btn active" id="marketTab" onclick="setOrderType('market')">Рыночный</button><button class="tab-btn" id="limitTab" onclick="setOrderType('limit')">Лимитный</button></div>
+                    <div class="balance-row"><span data-i18n="available">Доступно:</span><span class="balance-value font-mono" id="walletBalance" style="color:#eaecef;">0.00 USDT</span></div>
+                    <div class="order-tabs"><button class="tab-btn active" id="marketTab" onclick="setOrderType('market')" data-i18n="marketTab">Рыночный</button><button class="tab-btn" id="limitTab" onclick="setOrderType('limit')" data-i18n="limitTab">Лимитный</button></div>
 
-                    <div class="order-input-group" id="limitPriceGroup" style="display: none;"><label>Цена ордера</label>
+                    <div class="order-input-group" id="limitPriceGroup" style="display: none;"><label data-i18n="orderPrice">Цена ордера</label>
                         <div class="input-wrapper"><input type="number" id="limitPriceInput" placeholder="0.0"><span class="input-currency">USDT</span></div>
                     </div>
 
                     <div class="order-input-group">
-                        <label>Размер маржи</label>
+                        <label data-i18n="marginSize">Размер маржи</label>
                         <div class="input-wrapper"><input type="number" id="marginUSDT" placeholder="0.0" oninput="updateTpSlEstimates()"><span class="input-currency">USDT</span></div>
                         <div class="percent-row">
                             <div class="percent-slider-info"><span>Процент: <span id="percentDisplay">0</span>%</span><span>Макс: ≈<span id="maxMarginDisplay">0.00</span> USDT</span></div>
@@ -580,10 +581,10 @@
                         </div>
                     </div>
 
-                    <div class="order-input-group"><label>Кредитное плечо: <span id="levDisplay" style="color:#FFC700; font-weight:bold;">10</span>x</label><input type="range" id="levSlider" min="1" max="100" value="10" oninput="document.getElementById('levDisplay').innerText=this.value; updateEstimatedLiqPrice(); updateTpSlEstimates();"></div>
+                    <div class="order-input-group"><label><span data-i18n="leverage">Кредитное плечо</span>: <span id="levDisplay" style="color:#FFC700; font-weight:bold;">10</span>x</label><input type="range" id="levSlider" min="1" max="100" value="10" oninput="document.getElementById('levDisplay').innerText=this.value; updateEstimatedLiqPrice(); updateTpSlEstimates();"></div>
 
                     <div id="estLiqPriceBox" style="background:#161a1e; border:1px solid #1e2026; border-radius:4px; padding:8px 10px; margin:2px 0 2px; font-size:11.5px;">
-                        <div style="color:#848e9c; margin-bottom:6px;">Прибл. цена ликвидации</div>
+                        <div style="color:#848e9c; margin-bottom:6px;" data-i18n="estLiqPrice">Прибл. цена ликвидации</div>
                         <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
                             <span style="color:#00c087;">Long</span>
                             <span id="estLiqPriceLong" style="font-family: monospace; font-weight:600; text-align:right;">—</span>
@@ -593,10 +594,10 @@
                             <span id="estLiqPriceShort" style="font-family: monospace; font-weight:600; text-align:right;">—</span>
                         </div>
                     </div>
-                    <div style="color:#5b6472; font-size:10px; margin-bottom:6px; line-height:1.3;">Приблизительно — не учитывает будущие funding/borrowing комиссии, которые сдвинут цену ликвидации ближе к цене входа со временем.</div>
+                    <div style="color:#5b6472; font-size:10px; margin-bottom:6px; line-height:1.3;" data-i18n="estLiqDisclaimer">Приблизительно — не учитывает будущие funding/borrowing комиссии, которые сдвинут цену ликвидации ближе к цене входа со временем.</div>
 
                     <div class="order-input-group" style="margin-top: 4px;">
-                        <label>Тейк-профит (TP)</label>
+                        <label data-i18n="takeProfit">Тейк-профит (TP)</label>
                         <div class="input-wrapper">
                             <input type="number" id="tpInput" placeholder="Цена USDT" oninput="updateTpSlEstimates()">
                             <span class="input-currency">USDT</span>
@@ -604,7 +605,7 @@
                         <div id="tpEstBox" style="font-size:11px; color:#5b6472; margin-top:5px; line-height:1.4;"></div>
                     </div>
                     <div class="order-input-group">
-                        <label>Стоп-лосс (SL)</label>
+                        <label data-i18n="stopLoss">Стоп-лосс (SL)</label>
                         <div class="input-wrapper">
                             <input type="number" id="slInput" placeholder="Цена USDT" oninput="updateTpSlEstimates()">
                             <span class="input-currency">USDT</span>
@@ -859,6 +860,58 @@
         // $10,000 USDT balance. All state lives client-side (localStorage), never touches the
         // blockchain. Prices/leverage math are the same as real trading — only the money and
         // the actual order submission are simulated.
+        // Language switcher: static UI chrome only (nav, order form, table headers, tab labels) —
+        // covers what's on screen at all times. Dynamically-generated text (toasts, notifications,
+        // FAQ body, error messages) stays Russian-only for now; translating those too is a much
+        // bigger follow-up pass, not something to half-do here.
+        const translations = {
+            ru: {
+                navNews: 'Новости', navFaq: 'FAQ', navSupport: 'Поддержка', navCom: 'Com ▾',
+                available: 'Доступно:', marketTab: 'Рыночный', limitTab: 'Лимитный',
+                marginSize: 'Размер маржи', leverage: 'Кредитное плечо', orderPrice: 'Цена ордера',
+                takeProfit: 'Тейк-профит (TP)', stopLoss: 'Стоп-лосс (SL)',
+                estLiqPrice: 'Прибл. цена ликвидации', estLiqDisclaimer: 'Приблизительно — не учитывает будущие funding/borrowing комиссии, которые сдвинут цену ликвидации ближе к цене входа со временем.',
+                coinSearchPlaceholder: 'Поиск монет...',
+                tabPositions: 'Позиции', tabOrders: 'Открытые ордера', tabHistory: 'История ордеров',
+                thSymbol: 'Символ', thSize: 'Размер', thEntryPrice: 'Входная цена', thMark: 'Маркировка',
+                thLiq: 'Ликвидация', thMarginRatio: 'Коэф. маржи', thMargin: 'Маржа', thPnl: 'PNL (ROE%)', thAction: 'Действие',
+            },
+            en: {
+                navNews: 'News', navFaq: 'FAQ', navSupport: 'Support', navCom: 'Com ▾',
+                available: 'Available:', marketTab: 'Market', limitTab: 'Limit',
+                marginSize: 'Margin size', leverage: 'Leverage', orderPrice: 'Order price',
+                takeProfit: 'Take Profit (TP)', stopLoss: 'Stop Loss (SL)',
+                estLiqPrice: 'Est. liquidation price', estLiqDisclaimer: 'Approximate — does not account for future funding/borrowing fees, which will move the liquidation price closer to the entry price over time.',
+                coinSearchPlaceholder: 'Search coins...',
+                tabPositions: 'Positions', tabOrders: 'Open orders', tabHistory: 'Order history',
+                thSymbol: 'Symbol', thSize: 'Size', thEntryPrice: 'Entry price', thMark: 'Mark',
+                thLiq: 'Liquidation', thMarginRatio: 'Margin ratio', thMargin: 'Margin', thPnl: 'PNL (ROE%)', thAction: 'Action',
+            }
+        };
+        let currentLang = localStorage.getItem('lang') || 'ru';
+        function t(key) { return (translations[currentLang] && translations[currentLang][key]) || translations.ru[key] || key; }
+
+        function applyTranslations() {
+            document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => { el.placeholder = t(el.dataset.i18nPlaceholder); });
+            // Tab labels carry a live count baked into the text (e.g. "Positions (3)") set
+            // elsewhere by JS on every refresh, so a plain data-i18n swap would just get
+            // overwritten on the next refresh — re-set them here from the same counts instead.
+            const posCount = document.getElementById('tabPositions')?.dataset.count || '0';
+            const ordCount = document.getElementById('tabOrders')?.dataset.count || '0';
+            document.getElementById('tabPositions').textContent = `${t('tabPositions')} (${posCount})`;
+            document.getElementById('tabOrders').textContent = `${t('tabOrders')} (${ordCount})`;
+            document.getElementById('tabHistory').textContent = t('tabHistory');
+            const btn = document.getElementById('langToggleBtn');
+            if (btn) btn.textContent = currentLang === 'ru' ? 'EN' : 'RU'; // shows the language you'd switch TO
+        }
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'ru' ? 'en' : 'ru';
+            localStorage.setItem('lang', currentLang);
+            applyTranslations();
+        }
+
         let isDemoMode = false;
         let demoBalance = 10000;
         let demoPositions = [];   // open demo positions, same shape the real position table expects
@@ -1103,6 +1156,7 @@
             hideAll();
             document.getElementById('app-terminal').style.display = 'flex';
             if (!terminalInitialized) initTerminal();
+            applyTranslations();
             // Always land on the main trade/chart view, not whatever sub-view (PnL, FAQ, news)
             // happened to be open before you left the terminal — e.g. clicking the logo from the
             // PnL tab and then picking a different login method should return to the charts, not
@@ -2285,12 +2339,14 @@
                 // place still execute normally via GMX's keepers, just track them on app.gmx.io
                 // for now. Left empty here rather than guessing at a fragile ABI decode.
                 tbody.innerHTML = '';
-                tabLabel.innerText = `Открытые ордера (0)`;
+                tabLabel.dataset.count = 0;
+                tabLabel.textContent = `${t('tabOrders')} (0)`;
                 if (isActiveTab) { table.classList.remove('active'); emptyBox.classList.add('active'); }
                 return;
             }
 
-            tabLabel.innerText = `Открытые ордера (${demoOrders.length})`;
+            tabLabel.dataset.count = demoOrders.length;
+            tabLabel.textContent = `${t('tabOrders')} (${demoOrders.length})`;
             tbody.innerHTML = demoOrders.map(o => `
                 <tr>
                     <td>${new Date(o.createdAt).toLocaleTimeString('ru-RU')}</td>
@@ -2418,7 +2474,9 @@
         async function renderPositions(list) {
             const tbody = document.getElementById('positionsTbody');
             const emptyBox = document.getElementById('emptyPositionsBox');
-            document.getElementById('tabPositions').innerText = `Позиции (${list.length})`;
+            const tabPositionsEl = document.getElementById('tabPositions');
+            tabPositionsEl.dataset.count = list.length;
+            tabPositionsEl.textContent = `${t('tabPositions')} (${list.length})`;
             if (currentBottomTab !== 'positions') return;
 
             if (list.length === 0) {
