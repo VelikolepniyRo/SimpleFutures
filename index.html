@@ -49,6 +49,14 @@
         .btn-outline:hover { color: #eaecef; border-color: #2b2f36; background: #1e2226; }
         .wallet-btn { background-color: #E6B400; color: #ffffff; border: none; padding: 6px 14px; border-radius: 4px; font-weight: 600; font-size: 12px; cursor: pointer; transition: 0.15s ease; display: flex; align-items: center; gap: 6px; }
         .wallet-btn:hover { background-color: #CC9F00; }
+
+        /* Language switch (ползунок) — used both on the landing header and the terminal header */
+        .lang-switch { position: relative; display: flex; align-items: center; width: 60px; height: 26px; background: #1e2226; border: 1px solid #2b2f36; border-radius: 13px; cursor: pointer; user-select: none; flex-shrink: 0; }
+        .lang-switch-thumb { position: absolute; top: 2px; left: 2px; width: 28px; height: 20px; background: #FFC700; border-radius: 10px; transition: left 0.18s ease; }
+        .lang-switch[data-active="ru"] .lang-switch-thumb { left: 30px; }
+        .lang-switch-opt { position: relative; z-index: 1; flex: 1; text-align: center; font-size: 10px; font-weight: 700; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; color: #848e9c; transition: color 0.18s ease; pointer-events: none; }
+        .lang-switch[data-active="en"] .lang-switch-opt-en { color: #14151a; }
+        .lang-switch[data-active="ru"] .lang-switch-opt-ru { color: #14151a; }
         
         /* Landing Hero & Cards */
         .hero-section { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; min-height: 100vh; padding: 100px 20px 60px; background: radial-gradient(circle at 50% -10%, #2a2308 0%, #0c0d10 70%); position: relative; }
@@ -322,34 +330,39 @@
                 <span class="logo-text">SimpleFutures</span>
             </div>
             <div class="header-btns">
-                <button class="btn-outline" onclick="openFeedback()">Оставить отзыв</button>
-                <button class="wallet-btn" onclick="openAuth()">Вход в terminal</button>
+                <div class="lang-switch" onclick="toggleLanguage()" role="button" aria-label="EN / RU">
+                    <span class="lang-switch-thumb"></span>
+                    <span class="lang-switch-opt lang-switch-opt-en">EN</span>
+                    <span class="lang-switch-opt lang-switch-opt-ru">RU</span>
+                </div>
+                <button class="btn-outline" onclick="openFeedback()" data-i18n="feedbackBtn">Оставить отзыв</button>
+                <button class="wallet-btn" onclick="openAuth()" data-i18n="enterTerminalBtn">Вход в terminal</button>
             </div>
         </div>
 
         <div class="hero-section">
-            <h1 class="hero-title">Децентрализованный <span>торговый терминал</span></h1>
-            <p class="hero-subtitle">Торгуйте бессрочными контрактами с плечом напрямую через смарт-контракты GMX Protocol в сети Arbitrum. Некастодиальный интерфейс: ваши ключи и средства всегда остаются у вас.</p>
-            <button class="cta-btn" onclick="openAuth()">Начать торговать</button>
+            <h1 class="hero-title" data-i18n-html="heroTitle">Децентрализованный <span>торговый терминал</span></h1>
+            <p class="hero-subtitle" data-i18n="heroSubtitle">Торгуйте бессрочными контрактами с плечом напрямую через смарт-контракты GMX Protocol в сети Arbitrum. Некастодиальный интерфейс: ваши ключи и средства всегда остаются у вас.</p>
+            <button class="cta-btn" onclick="openAuth()" data-i18n="ctaBtn">Начать торговать</button>
         </div>
 
         <div class="reasons-section">
-            <h2 class="reasons-title">Преимущества SimpleFutures</h2>
+            <h2 class="reasons-title" data-i18n="reasonsTitle">Преимущества SimpleFutures</h2>
             <div class="reasons-grid">
                 <div class="reason-card">
                     <div class="reason-icon">⚡</div>
-                    <div class="reason-card-title">Протокол GMX</div>
-                    <div class="reason-card-desc">Все финансовые сделки открываются напрямую в пуле ликвидности GMX на Arbitrum One с минимальным спредом и низкой проскальзываемостью.</div>
+                    <div class="reason-card-title" data-i18n="reason1Title">Протокол GMX</div>
+                    <div class="reason-card-desc" data-i18n="reason1Desc">Все финансовые сделки открываются напрямую в пуле ликвидности GMX на Arbitrum One с минимальным спредом и низкой проскальзываемостью.</div>
                 </div>
                 <div class="reason-card">
                     <div class="reason-icon">🔑</div>
-                    <div class="reason-card-title">Гибкий вход</div>
-                    <div class="reason-card-desc">Подключайтесь через MetaMask, Trust Wallet или любое расширение, поддерживающее EIP-6963, — без регистрации и KYC.</div>
+                    <div class="reason-card-title" data-i18n="reason2Title">Гибкий вход</div>
+                    <div class="reason-card-desc" data-i18n="reason2Desc">Подключайтесь через MetaMask, Trust Wallet или любое расширение, поддерживающее EIP-6963, — без регистрации и KYC.</div>
                 </div>
                 <div class="reason-card">
                     <div class="reason-icon">📈</div>
-                    <div class="reason-card-title">Глубокий анализ</div>
-                    <div class="reason-card-desc">Интегрированные графики TradingView, отслеживание маржи, установление Take Profit / Stop Loss.</div>
+                    <div class="reason-card-title" data-i18n="reason3Title">Глубокий анализ</div>
+                    <div class="reason-card-desc" data-i18n="reason3Desc">Интегрированные графики TradingView, отслеживание маржи, установление Take Profit / Stop Loss.</div>
                 </div>
             </div>
         </div>
@@ -437,7 +450,11 @@
             </div>
 
             <div class="header-controls">
-                <button id="langToggleBtn" onclick="toggleLanguage()" style="background:#1e2226; border:1px solid #2b2f36; color:#eaecef; font-size:11px; font-weight:700; padding:5px 10px; border-radius:4px; cursor:pointer; font-family:monospace;">EN</button>
+                <div class="lang-switch" onclick="toggleLanguage()" role="button" aria-label="EN / RU">
+                    <span class="lang-switch-thumb"></span>
+                    <span class="lang-switch-opt lang-switch-opt-en">EN</span>
+                    <span class="lang-switch-opt lang-switch-opt-ru">RU</span>
+                </div>
                 <div class="px-2 py-1 bg-[#1e2226] rounded text-[10px] text-blue-400 font-mono border border-[#2b2f36]">ARBITRUM ONE</div>
                 <button class="wallet-btn" id="connectBtn" onclick="openAuth()">Подключить кошелек</button>
                 
@@ -866,6 +883,13 @@
         // bigger follow-up pass, not something to half-do here.
         const translations = {
             ru: {
+                feedbackBtn: 'Оставить отзыв', enterTerminalBtn: 'Вход в terminal',
+                heroTitle: 'Децентрализованный <span>торговый терминал</span>',
+                heroSubtitle: 'Торгуйте бессрочными контрактами с плечом напрямую через смарт-контракты GMX Protocol в сети Arbitrum. Некастодиальный интерфейс: ваши ключи и средства всегда остаются у вас.',
+                ctaBtn: 'Начать торговать', reasonsTitle: 'Преимущества SimpleFutures',
+                reason1Title: 'Протокол GMX', reason1Desc: 'Все финансовые сделки открываются напрямую в пуле ликвидности GMX на Arbitrum One с минимальным спредом и низкой проскальзываемостью.',
+                reason2Title: 'Гибкий вход', reason2Desc: 'Подключайтесь через MetaMask, Trust Wallet или любое расширение, поддерживающее EIP-6963, — без регистрации и KYC.',
+                reason3Title: 'Глубокий анализ', reason3Desc: 'Интегрированные графики TradingView, отслеживание маржи, установление Take Profit / Stop Loss.',
                 navNews: 'Новости', navFaq: 'FAQ', navSupport: 'Поддержка', navCom: 'Com ▾',
                 available: 'Доступно:', marketTab: 'Рыночный', limitTab: 'Лимитный',
                 marginSize: 'Размер маржи', leverage: 'Кредитное плечо', orderPrice: 'Цена ордера',
@@ -877,6 +901,13 @@
                 thLiq: 'Ликвидация', thMarginRatio: 'Коэф. маржи', thMargin: 'Маржа', thPnl: 'PNL (ROE%)', thAction: 'Действие',
             },
             en: {
+                feedbackBtn: 'Leave feedback', enterTerminalBtn: 'Enter terminal',
+                heroTitle: 'Decentralized <span>Trading Terminal</span>',
+                heroSubtitle: 'Trade leveraged perpetual contracts directly through GMX Protocol smart contracts on Arbitrum. Non-custodial interface: your keys and funds always stay with you.',
+                ctaBtn: 'Start trading', reasonsTitle: 'Why SimpleFutures',
+                reason1Title: 'GMX Protocol', reason1Desc: 'All trades are opened directly in the GMX liquidity pool on Arbitrum One with minimal spread and low slippage.',
+                reason2Title: 'Flexible login', reason2Desc: 'Connect with MetaMask, Trust Wallet, or any EIP-6963-compatible extension — no registration, no KYC.',
+                reason3Title: 'In-depth analysis', reason3Desc: 'Integrated TradingView charts, margin tracking, Take Profit / Stop Loss setup.',
                 navNews: 'News', navFaq: 'FAQ', navSupport: 'Support', navCom: 'Com ▾',
                 available: 'Available:', marketTab: 'Market', limitTab: 'Limit',
                 marginSize: 'Margin size', leverage: 'Leverage', orderPrice: 'Order price',
@@ -888,22 +919,35 @@
                 thLiq: 'Liquidation', thMarginRatio: 'Margin ratio', thMargin: 'Margin', thPnl: 'PNL (ROE%)', thAction: 'Action',
             }
         };
-        let currentLang = localStorage.getItem('lang') || 'ru';
+        // Default is English for first-time visitors; once someone picks a language it's
+        // remembered in localStorage and wins on every later visit.
+        let currentLang = localStorage.getItem('lang') || 'en';
         function t(key) { return (translations[currentLang] && translations[currentLang][key]) || translations.ru[key] || key; }
 
         function applyTranslations() {
             document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
+            document.querySelectorAll('[data-i18n-html]').forEach(el => { el.innerHTML = t(el.dataset.i18nHtml); });
             document.querySelectorAll('[data-i18n-placeholder]').forEach(el => { el.placeholder = t(el.dataset.i18nPlaceholder); });
             // Tab labels carry a live count baked into the text (e.g. "Positions (3)") set
             // elsewhere by JS on every refresh, so a plain data-i18n swap would just get
             // overwritten on the next refresh — re-set them here from the same counts instead.
-            const posCount = document.getElementById('tabPositions')?.dataset.count || '0';
-            const ordCount = document.getElementById('tabOrders')?.dataset.count || '0';
-            document.getElementById('tabPositions').textContent = `${t('tabPositions')} (${posCount})`;
-            document.getElementById('tabOrders').textContent = `${t('tabOrders')} (${ordCount})`;
-            document.getElementById('tabHistory').textContent = t('tabHistory');
-            const btn = document.getElementById('langToggleBtn');
-            if (btn) btn.textContent = currentLang === 'ru' ? 'EN' : 'RU'; // shows the language you'd switch TO
+            // These only exist once the terminal has been rendered at least once.
+            const tabPositionsEl = document.getElementById('tabPositions');
+            const tabOrdersEl = document.getElementById('tabOrders');
+            const tabHistoryEl = document.getElementById('tabHistory');
+            if (tabPositionsEl) {
+                const posCount = tabPositionsEl.dataset.count || '0';
+                tabPositionsEl.textContent = `${t('tabPositions')} (${posCount})`;
+            }
+            if (tabOrdersEl) {
+                const ordCount = tabOrdersEl.dataset.count || '0';
+                tabOrdersEl.textContent = `${t('tabOrders')} (${ordCount})`;
+            }
+            if (tabHistoryEl) tabHistoryEl.textContent = t('tabHistory');
+            // There can be more than one switch on screen (landing header + terminal header),
+            // so update all of them, plus the <html lang> attribute for accessibility/SEO.
+            document.querySelectorAll('.lang-switch').forEach(el => { el.setAttribute('data-active', currentLang); });
+            document.documentElement.setAttribute('lang', currentLang);
         }
 
         function toggleLanguage() {
@@ -911,6 +955,11 @@
             localStorage.setItem('lang', currentLang);
             applyTranslations();
         }
+
+        // Paint the correct language immediately on page load — previously this only ran
+        // when entering the terminal, so the landing page always showed hardcoded Russian
+        // text regardless of the saved/default language.
+        applyTranslations();
 
         let isDemoMode = false;
         let demoBalance = 10000;
