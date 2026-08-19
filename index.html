@@ -1105,12 +1105,12 @@
                         GMX_MARKETS[symbol] = { marketAddress: ethers.utils.getAddress(m.marketToken), indexToken: ethers.utils.getAddress(m.indexToken) };
                     });
 
-                    // The sidebar coin list is driven by `cryptoPairs`, which starts out as either
-                    // the hardcoded default or whatever /get_pairs.php returned — neither of which
-                    // necessarily covers every market GMX actually lists. Now that we know the real,
-                    // live set of tradable GMX markets, fold in any symbol that's missing so nothing
-                    // GMX supports is hidden from the list, then re-render so it actually shows up
-                    // (renderCoinList() already ran once before this async call finished).
+                    // The sidebar coin list is driven by `cryptoPairs`, the hardcoded default list
+                    // in this file, which doesn't necessarily cover every market GMX actually
+                    // lists. Now that we know the real, live set of tradable GMX markets, fold in
+                    // any symbol that's missing so nothing GMX supports is hidden from the list,
+                    // then re-render so it actually shows up (renderCoinList() already ran once
+                    // before this async call finished).
                     let addedNewSymbol = false;
                     Object.keys(GMX_MARKETS).forEach(symbol => {
                         if (!cryptoPairs.includes(symbol)) { cryptoPairs.push(symbol); addedNewSymbol = true; }
@@ -1177,7 +1177,12 @@
             }
         }
 
-        let cryptoPairs = ['BTC', 'ETH', 'SOL', 'HYPE', 'BNB', 'XRP', 'ADA', 'DOGE', 'AVAX', 'LINK', 'POL', 'DOT', 'LTC', 'SHIB', 'TRX', 'UNI', 'ATOM', 'GRAM', 'NEAR', 'APT', 'ARB', 'OP', 'SUI', 'INJ', 'RENDER', 'TIA', 'STX', 'GRT', 'IMX', 'VET', 'MKR', 'RUNE', 'AAVE', 'SNX', 'SAND', 'MANA', 'THETA', 'AXS', 'GALA', 'FTM', 'DYDX', 'CRV', 'CHZ', 'PEPE', 'FLOKI', 'WLD'];
+        let cryptoPairs = ['BTC', 'ETH', 'SOL', 'HYPE', 'BNB', 'XRP', 'ADA', 'DOGE', 'AVAX', 'LINK', 'POL', 'DOT', 'LTC', 'SHIB', 'TRX', 'UNI', 'ATOM', 'GRAM', 'NEAR', 'APT', 'ARB', 'OP', 'SUI', 'INJ', 'RENDER', 'TIA', 'STX', 'MKR', 'AAVE', 'DYDX', 'CRV', 'CHZ', 'PEPE', 'FLOKI', 'WLD'];
+        // Removed (2026-08-19): GRT, IMX, VET, RUNE, SNX, SAND, MANA, THETA, AXS, GALA, FTM —
+        // verified against GMX's live /markets endpoint (arbitrum-api.gmxinfra.io/markets):
+        // none of these currently have an actual GMX market on Arbitrum, so a position could
+        // never really be opened for them (FTM in particular: Fantom rebranded FTM to Sonic/S
+        // and GMX's market now tracks S, not FTM).
 
         // Toncoin (TON) was renamed to Gram (GRAM) by community vote, effective June 15, 2026 —
         // same network, same token, name/ticker/logo only (https://docs.ton.org, TON Vote). The
@@ -1190,21 +1195,6 @@
             if (GMX_MARKETS[sym]) return sym;
             const alias = LEGACY_TICKER_ALIASES[sym];
             return (alias && GMX_MARKETS[alias]) ? alias : sym;
-        }
-        let pairMeta = {};
-
-        async function loadTradingPairs() {
-            try {
-                const res = await fetch('/get_pairs.php');
-                const data = await res.json();
-                if (!data.pairs || !data.pairs.length) return;
-                cryptoPairs = data.pairs.map(p => p.symbol);
-                pairMeta = {};
-                data.pairs.forEach(p => { pairMeta[p.symbol] = { category: p.category, price_source: p.price_source }; });
-                renderCoinList();
-            } catch (e) {
-                console.error("Не удалось загрузить пары из БД:", e);
-            }
         }
 
         function hideAll() {
@@ -3069,7 +3059,6 @@
 
         async function initTerminal() { 
             renderCoinList();
-            loadTradingPairs();
             loadGmxMarkets();
             updateAsset(null, 'BTC');
             fetchAllPrices();
@@ -3150,7 +3139,7 @@
         }
 
         // escapeHtml: for any dynamic string going into innerHTML that didn't originate as a
-        // hardcoded literal in this file — GMX's own API response fields, get_pairs.php, wallet/
+        // hardcoded literal in this file — GMX's own API response fields, wallet/
         // RPC/contract error messages, anything typed by a user. GMX and our own backend are
         // trusted today, but "trusted API" and "never returns a weird string" aren't the same
         // guarantee, and a contract can revert with an arbitrary attacker-chosen string — so
