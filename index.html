@@ -675,7 +675,7 @@
                 <div id="xNewsWidgetPlaceholder" style="color:#848e9c; font-size:13px; line-height:1.6; padding:24px; border:1px solid #1e2026; border-radius:8px;">
                     Загрузка новостей...
                 </div>
-                <div id="xNewsWidgetContainer" style="max-width:520px; margin:0 auto;"></div>
+                <div id="xNewsWidgetContainer" style="max-width:550px; margin:0 auto;"></div>
             </div>
         </div>
 
@@ -1271,7 +1271,7 @@
         // (x.com/handle/status/1234567890123456789 -> take "1234567890123456789") and add it
         // below, newest first.
         const NEWS_TWEET_IDS = [
-             "2089454810890199076","2089741129411350715","2090083912147992829"
+             "2090083912147992829","2089741129411350715","2089454810890199076"
         ];
         let xWidgetLoaded = false;
         function loadNewsWidget() {
@@ -1292,7 +1292,7 @@
                     const slot = document.createElement('div');
                     slot.style.marginBottom = '16px';
                     container.appendChild(slot);
-                    window.twttr.widgets.createTweet(id, slot, { theme: 'dark', dnt: true }).catch(e => {
+                    window.twttr.widgets.createTweet(id, slot, { theme: 'dark', dnt: true, width: 550 }).catch(e => {
                         console.error(`[X widget] Не удалось загрузить твит ${id}:`, e);
                         failedCount++;
                         if (failedCount === NEWS_TWEET_IDS.length) {
