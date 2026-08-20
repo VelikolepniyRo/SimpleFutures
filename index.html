@@ -641,28 +641,76 @@
 
         <div id="terminal-faq-view" style="display: none; padding: 40px 20px; overflow-y: auto; flex: 1; background-color: #0c0d10;">
             <div class="faq-wrapper">
-                <h2 class="faq-title">Часто задаваемые вопросы</h2>
+                <h2 class="faq-title" data-i18n="faqTitle">Часто задаваемые вопросы</h2>
                 
                 <div class="faq-item">
                     <button class="faq-question" onclick="toggleFaq(this)">
-                        <span>1. Как работает интеграция с GMX?</span>
+                        <span data-i18n="faqQ1">1. Как работает интеграция с GMX?</span>
                         <span class="faq-arrow">▼</span>
                     </button>
                     <div class="faq-answer">
                         <div class="faq-answer-inner">
-                            <p>Терминал взаимодействует напрямую со смарт-контрактами GMX на сети Arbitrum One. Ваши позиции открываются в децентрализованном пуле, а PnL рассчитывается на основе надежного оракула цен Chainlink/GMX.</p>
+                            <p data-i18n="faqA1">Терминал взаимодействует напрямую со смарт-контрактами GMX на сети Arbitrum One. Ваши позиции открываются в децентрализованном пуле, а PnL рассчитывается на основе надежного оракула цен Chainlink/GMX.</p>
                         </div>
                     </div>
                 </div>
 
                 <div class="faq-item">
                     <button class="faq-question" onclick="toggleFaq(this)">
-                        <span>2. Безопасны ли мои средства?</span>
+                        <span data-i18n="faqQ2">2. Безопасны ли мои средства?</span>
                         <span class="faq-arrow">▼</span>
                     </button>
                     <div class="faq-answer">
                         <div class="faq-answer-inner">
-                            <p>Платформа является полностью Non-Custodial. Вы сохраняете 100% контроля над своими приватными ключами и средствами. Мы не запрашиваем KYC и не храним ваши депозиты на кастодиальных серверах.</p>
+                            <p data-i18n="faqA2">Платформа является полностью Non-Custodial. Вы сохраняете 100% контроля над своими приватными ключами и средствами. Мы не запрашиваем KYC и не храним ваши депозиты на кастодиальных серверах.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        <span data-i18n="faqQ3">3. Какие кошельки поддерживаются?</span>
+                        <span class="faq-arrow">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-inner">
+                            <p data-i18n="faqA3">Мы поддерживаем MetaMask, Trust Wallet, Bitget Wallet, а также любое расширение, совместимое со стандартом EIP-6963 — просто выберите его на экране входа.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        <span data-i18n="faqQ4">4. Есть ли демо-режим?</span>
+                        <span class="faq-arrow">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-inner">
+                            <p data-i18n="faqA4">Да. В демо-режиме доступен тот же интерфейс без подключения кошелька — со стартовым виртуальным балансом $10,000. Ничего не отправляется в блокчейн, поэтому можно свободно потренироваться перед реальной торговлей.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        <span data-i18n="faqQ5">5. Какая комиссия за сделки?</span>
+                        <span class="faq-arrow">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-inner">
+                            <p data-i18n="faqA5">Комиссии (открытие/закрытие позиции, funding и borrowing) устанавливает сам протокол GMX и зависят от текущего рынка — мы их не меняем и не берём дополнительную комиссию сверху.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        <span data-i18n="faqQ6">6. Как работают Take Profit / Stop Loss?</span>
+                        <span class="faq-arrow">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-inner">
+                            <p data-i18n="faqA6">Вы задаёте цену TP и/или SL для открытой позиции кнопкой TP/SL в таблице позиций. Ордер размещается напрямую в сети и исполняется GMX Keeper'ом автоматически при достижении заданной цены.</p>
                         </div>
                     </div>
                 </div>
@@ -670,12 +718,12 @@
         </div>
 
         <div id="terminal-news-view" style="display: none; padding: 40px 20px; overflow-y: auto; flex: 1; background-color: #0c0d10;">
-            <div class="faq-wrapper">
-                <h2 class="faq-title">Новости</h2>
+            <div class="faq-wrapper" style="max-width:1200px;">
+                <h2 class="faq-title" data-i18n="navNews">Новости</h2>
                 <div id="xNewsWidgetPlaceholder" style="color:#848e9c; font-size:13px; line-height:1.6; padding:24px; border:1px solid #1e2026; border-radius:8px;">
                     Загрузка новостей...
                 </div>
-                <div id="xNewsWidgetContainer" style="max-width:550px; margin:0 auto;"></div>
+                <div id="xNewsWidgetContainer" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap:20px; align-items:start;"></div>
             </div>
         </div>
 
@@ -897,6 +945,13 @@
                 authDisclaimer: 'Приложение полностью некастодиальное — мы никогда не получаем доступ к вашим приватным ключам. Транзакции подписываются только в вашем кошельке.',
                 authNoWalletDivider: 'Без кошелька', authDemoBtn: '🎮 Демо-режим',
                 authDemoDesc: 'Тот же интерфейс, но без кошелька и реальных денег — стартовый баланс $10,000 (виртуальный). Ничего не отправляется в блокчейн.',
+                faqTitle: 'Часто задаваемые вопросы',
+                faqQ1: '1. Как работает интеграция с GMX?', faqA1: 'Терминал взаимодействует напрямую со смарт-контрактами GMX на сети Arbitrum One. Ваши позиции открываются в децентрализованном пуле, а PnL рассчитывается на основе надежного оракула цен Chainlink/GMX.',
+                faqQ2: '2. Безопасны ли мои средства?', faqA2: 'Платформа является полностью Non-Custodial. Вы сохраняете 100% контроля над своими приватными ключами и средствами. Мы не запрашиваем KYC и не храним ваши депозиты на кастодиальных серверах.',
+                faqQ3: '3. Какие кошельки поддерживаются?', faqA3: 'Мы поддерживаем MetaMask, Trust Wallet, Bitget Wallet, а также любое расширение, совместимое со стандартом EIP-6963 — просто выберите его на экране входа.',
+                faqQ4: '4. Есть ли демо-режим?', faqA4: 'Да. В демо-режиме доступен тот же интерфейс без подключения кошелька — со стартовым виртуальным балансом $10,000. Ничего не отправляется в блокчейн, поэтому можно свободно потренироваться перед реальной торговлей.',
+                faqQ5: '5. Какая комиссия за сделки?', faqA5: 'Комиссии (открытие/закрытие позиции, funding и borrowing) устанавливает сам протокол GMX и зависят от текущего рынка — мы их не меняем и не берём дополнительную комиссию сверху.',
+                faqQ6: '6. Как работают Take Profit / Stop Loss?', faqA6: 'Вы задаёте цену TP и/или SL для открытой позиции кнопкой TP/SL в таблице позиций. Ордер размещается напрямую в сети и исполняется GMX Keeper\'ом автоматически при достижении заданной цены.',
                 navNews: 'Новости', navFaq: 'FAQ', navSupport: 'Поддержка', navCom: 'Com ▾',
                 tickerChange24h: 'Изменение 24ч', tickerHigh24h: 'Макс 24ч', tickerLow24h: 'Мин 24ч', tickerVol24h: 'Объем 24ч (USDT)',
                 available: 'Доступно:', marketTab: 'Рыночный', limitTab: 'Лимитный',
@@ -921,6 +976,13 @@
                 authDisclaimer: 'The app is fully non-custodial — we never get access to your private keys. Transactions are signed only in your own wallet.',
                 authNoWalletDivider: 'No wallet needed', authDemoBtn: '🎮 Demo mode',
                 authDemoDesc: 'Same interface, but no wallet and no real money — starting balance $10,000 (virtual). Nothing is sent to the blockchain.',
+                faqTitle: 'Frequently Asked Questions',
+                faqQ1: '1. How does the GMX integration work?', faqA1: 'The terminal interacts directly with GMX smart contracts on the Arbitrum One network. Your positions are opened in a decentralized pool, and PnL is calculated using a reliable Chainlink/GMX price oracle.',
+                faqQ2: '2. Are my funds safe?', faqA2: 'The platform is fully non-custodial. You keep 100% control over your private keys and funds. We never require KYC and never hold your deposits on custodial servers.',
+                faqQ3: '3. Which wallets are supported?', faqA3: 'We support MetaMask, Trust Wallet, Bitget Wallet, and any extension compatible with the EIP-6963 standard — just pick it on the sign-in screen.',
+                faqQ4: '4. Is there a demo mode?', faqA4: 'Yes. Demo mode gives you the same interface without connecting a wallet — with a starting virtual balance of $10,000. Nothing is sent to the blockchain, so it\'s a safe way to practice before trading for real.',
+                faqQ5: '5. What are the trading fees?', faqA5: 'Fees (opening/closing a position, funding, and borrowing) are set by the GMX protocol itself and depend on current market conditions — we don\'t change them or add anything on top.',
+                faqQ6: '6. How do Take Profit / Stop Loss work?', faqA6: 'You set a TP and/or SL price for an open position using the TP/SL button in the positions table. The order is placed directly on-chain and is executed automatically by a GMX Keeper once the target price is reached.',
                 navNews: 'News', navFaq: 'FAQ', navSupport: 'Support', navCom: 'Com ▾',
                 tickerChange24h: '24h Change', tickerHigh24h: '24h High', tickerLow24h: '24h Low', tickerVol24h: '24h Volume (USDT)',
                 available: 'Available:', marketTab: 'Market', limitTab: 'Limit',
@@ -1268,11 +1330,17 @@
         // lot of accounts, especially newer/smaller ones. Since there are only a handful of
         // tweets to show, embedding each one directly sidesteps that entirely.
         // To add a tweet: open it on x.com, copy the numeric ID from the URL
-        // (x.com/handle/status/1234567890123456789 -> take "1234567890123456789") and add it
-        // below, newest first.
+        // (x.com/handle/status/1234567890123456789 -> take "1234567890123456789") and paste it
+        // between the quotes below, newest first. Empty slots are skipped automatically, and
+        // you can add more lines the same way if you post more than 6.
         const NEWS_TWEET_IDS = [
-             "2090083912147992829","2089741129411350715","2089454810890199076"
-        ];
+            "2090083912147992829",
+            "2089741129411350715",
+            "2089454810890199076",
+            "",
+            "",
+            "",
+        ].filter(Boolean);
         let xWidgetLoaded = false;
         function loadNewsWidget() {
             if (xWidgetLoaded) return;
@@ -1292,7 +1360,7 @@
                     const slot = document.createElement('div');
                     slot.style.marginBottom = '16px';
                     container.appendChild(slot);
-                    window.twttr.widgets.createTweet(id, slot, { theme: 'dark', dnt: true, width: 550 }).catch(e => {
+                    window.twttr.widgets.createTweet(id, slot, { theme: 'dark', dnt: true }).catch(e => {
                         console.error(`[X widget] Не удалось загрузить твит ${id}:`, e);
                         failedCount++;
                         if (failedCount === NEWS_TWEET_IDS.length) {
