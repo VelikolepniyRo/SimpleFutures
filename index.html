@@ -534,6 +534,7 @@
                                         <th data-i18n="thEntryPrice">Входная цена</th>
                                         <th data-i18n="thMark">Маркировка</th>
                                         <th data-i18n="thLiq">Ликвидация</th>
+                                        <th data-i18n="thTpSl">TP/SL</th>
                                         <th data-i18n="thMarginRatio">Коэф. маржи</th>
                                         <th data-i18n="thMargin">Маржа</th>
                                         <th data-i18n="thPnl">PNL (ROE%)</th>
@@ -672,7 +673,7 @@
             <div class="faq-wrapper">
                 <h2 class="faq-title">Новости</h2>
                 <div id="xNewsWidgetPlaceholder" style="color:#848e9c; font-size:13px; line-height:1.6; padding:24px; border:1px solid #1e2026; border-radius:8px;">
-                    Лента X ещё не подключена — впишите свой хэндл в переменную X_HANDLE в коде сайта.
+                    Загрузка новостей...
                 </div>
                 <div id="xNewsWidgetContainer" style="max-width:520px; margin:0 auto;"></div>
             </div>
@@ -905,7 +906,7 @@
                 coinSearchPlaceholder: 'Поиск монет...',
                 tabPositions: 'Позиции', tabOrders: 'Открытые ордера', tabHistory: 'История ордеров',
                 thSymbol: 'Символ', thSize: 'Размер', thEntryPrice: 'Входная цена', thMark: 'Маркировка',
-                thLiq: 'Ликвидация', thMarginRatio: 'Коэф. маржи', thMargin: 'Маржа', thPnl: 'PNL (ROE%)', thAction: 'Действие',
+                thLiq: 'Ликвидация', thTpSl: 'TP/SL', thMarginRatio: 'Коэф. маржи', thMargin: 'Маржа', thPnl: 'PNL (ROE%)', thAction: 'Действие',
             },
             en: {
                 feedbackBtn: 'Leave feedback', enterTerminalBtn: 'Enter terminal',
@@ -929,7 +930,7 @@
                 coinSearchPlaceholder: 'Search coins...',
                 tabPositions: 'Positions', tabOrders: 'Open orders', tabHistory: 'Order history',
                 thSymbol: 'Symbol', thSize: 'Size', thEntryPrice: 'Entry price', thMark: 'Mark',
-                thLiq: 'Liquidation', thMarginRatio: 'Margin ratio', thMargin: 'Margin', thPnl: 'PNL (ROE%)', thAction: 'Action',
+                thLiq: 'Liquidation', thTpSl: 'TP/SL', thMarginRatio: 'Margin ratio', thMargin: 'Margin', thPnl: 'PNL (ROE%)', thAction: 'Action',
             }
         };
         // Default is English for first-time visitors; once someone picks a language it's
@@ -1260,26 +1261,45 @@
             }
         }
 
-        // X (Twitter) timeline widget for the Новости tab. To go live: create the account, put
-        // its handle below (no @), and the official X embed script does the rest — pulls in
-        // live tweets client-side, no backend/DB/RSS feed needed. Loaded lazily (only once,
-        // first time someone opens the Новости tab) rather than on every page load, since it's
-        // an extra ~50kb third-party script nobody needs until they actually click there.
-        const X_HANDLE = "SimpleFutures"; // e.g. "simplefutures" — no @, must be a real public account
+        // Individual X (Twitter) tweet embeds for the Новости tab. `createTweet` (single-tweet
+        // embed) uses X's standard oEmbed-based embed path and is far more reliable than
+        // `createTimeline` (whole-profile embed) — the latter goes through X's separate
+        // "syndication" endpoint, which has become heavily rate-limited (frequent 429s) for a
+        // lot of accounts, especially newer/smaller ones. Since there are only a handful of
+        // tweets to show, embedding each one directly sidesteps that entirely.
+        // To add a tweet: open it on x.com, copy the numeric ID from the URL
+        // (x.com/handle/status/1234567890123456789 -> take "1234567890123456789") and add it
+        // below, newest first.
+        const NEWS_TWEET_IDS = [
+             "2089454810890199076","2089741129411350715","2090083912147992829"
+        ];
         let xWidgetLoaded = false;
         function loadNewsWidget() {
-            if (xWidgetLoaded || X_HANDLE === "YOUR_X_HANDLE") return;
+            if (xWidgetLoaded) return;
+            const placeholder = document.getElementById('xNewsWidgetPlaceholder');
+            const container = document.getElementById('xNewsWidgetContainer');
+            if (!NEWS_TWEET_IDS.length) {
+                placeholder.style.display = 'block';
+                placeholder.textContent = 'Новостей пока нет — впишите ID твитов в переменную NEWS_TWEET_IDS в коде сайта.';
+                return;
+            }
             xWidgetLoaded = true;
-            document.getElementById('xNewsWidgetPlaceholder').style.display = 'none';
+            placeholder.style.display = 'none';
             const finish = () => {
-                window.twttr.widgets.createTimeline(
-                    { sourceType: 'profile', screenName: X_HANDLE },
-                    document.getElementById('xNewsWidgetContainer'),
-                    { theme: 'dark', chrome: 'noheader nofooter noborders transparent', height: 600 }
-                ).catch(e => {
-                    console.error('[X widget] Не удалось загрузить ленту:', e);
-                    document.getElementById('xNewsWidgetPlaceholder').style.display = 'block';
-                    document.getElementById('xNewsWidgetPlaceholder').innerText = 'Не удалось загрузить ленту X. Проверьте, что хэндл указан верно и аккаунт публичный.';
+                container.innerHTML = '';
+                let failedCount = 0;
+                NEWS_TWEET_IDS.forEach(id => {
+                    const slot = document.createElement('div');
+                    slot.style.marginBottom = '16px';
+                    container.appendChild(slot);
+                    window.twttr.widgets.createTweet(id, slot, { theme: 'dark', dnt: true }).catch(e => {
+                        console.error(`[X widget] Не удалось загрузить твит ${id}:`, e);
+                        failedCount++;
+                        if (failedCount === NEWS_TWEET_IDS.length) {
+                            placeholder.style.display = 'block';
+                            placeholder.textContent = 'Не удалось загрузить твиты. Проверьте ID и что аккаунт публичный.';
+                        }
+                    });
                 });
             };
             if (window.twttr && window.twttr.widgets) { finish(); return; }
@@ -1288,8 +1308,8 @@
             s.async = true;
             s.onload = finish;
             s.onerror = () => {
-                document.getElementById('xNewsWidgetPlaceholder').style.display = 'block';
-                document.getElementById('xNewsWidgetPlaceholder').innerText = 'Не удалось загрузить скрипт X (заблокирован сетью/расширением?).';
+                placeholder.style.display = 'block';
+                placeholder.textContent = 'Не удалось загрузить скрипт X (заблокирован сетью/расширением?).';
                 xWidgetLoaded = false;
             };
             document.head.appendChild(s);
@@ -2579,18 +2599,18 @@
                     <td>${p.entryPrice.toFixed(4)}</td>
                     <td>${markPrice.toFixed(4)}</td>
                     <td>${liqPrice > 0 ? liqPrice.toFixed(4) : '-'}</td>
+                    <td style="font-size:11px; line-height:1.5;">
+                        <div>TP: ${p.takeProfit > 0 ? `<span style="color:#00c087; font-family:monospace;">${p.takeProfit}</span>` : '<span style="color:#5b6472;">—</span>'}</div>
+                        <div>SL: ${p.stopLoss > 0 ? `<span style="color:#f84960; font-family:monospace;">${p.stopLoss}</span>` : '<span style="color:#5b6472;">—</span>'}</div>
+                    </td>
                     <td>${(100 / p.leverage).toFixed(1)}%</td>
                     <td>${p.margin.toFixed(2)} USDT</td>
                     <td style="color: ${pnlColor};">${pnl >= 0 ? '+' : ''}${pnl.toFixed(2)} (${roe >= 0 ? '+' : ''}${roe.toFixed(1)}%)</td>
                     <td>
-                        <div style="display:flex; flex-direction:column; gap:2px; font-size:11px; margin-bottom:3px; line-height:1.5;">
-                            <span>TP: ${p.takeProfit > 0 ? `<span style="color:#00c087; font-family:monospace;">${p.takeProfit}</span>` : '<span style="color:#5b6472;">—</span>'}</span>
-                            <span>SL: ${p.stopLoss > 0 ? `<span style="color:#f84960; font-family:monospace;">${p.stopLoss}</span>` : '<span style="color:#5b6472;">—</span>'}</span>
-                        </div>
-                        <div style="display:flex; gap:4px; justify-content:flex-end; align-items:center;">
+                        <div style="display:flex; flex-direction:column; gap:4px; align-items:stretch;">
                             <button class="btn-outline" style="padding: 3px 6px; font-size: 11px;" onclick="openTpSlModal(${p.id})">TP/SL</button>
                             <button class="btn-outline" style="padding: 3px 8px; font-size: 11px;" onclick="submitClosePosition(${p.id}, this)">Закрыть</button>
-                            <button class="btn-outline" title="Поделиться" style="padding: 4px; width:24px; height:24px; display:flex; align-items:center; justify-content:center;" onclick="openShareModal(${p.id})">
+                            <button class="btn-outline" title="Поделиться" style="padding: 4px; width:24px; height:24px; display:flex; align-items:center; justify-content:center; align-self:center;" onclick="openShareModal(${p.id})">
                                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v13"/><path d="m16 6-4-4-4 4"/><path d="M20 12v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-6"/></svg>
                             </button>
                         </div>
