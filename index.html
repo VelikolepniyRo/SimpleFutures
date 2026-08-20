@@ -433,18 +433,14 @@
                 
                 <div class="header-nav">
                     <a class="header-nav-link active" id="navTrade" onclick="switchTerminalTab('trade')">Trade</a>
-                    <a class="header-nav-link" id="navNews" onclick="switchTerminalTab('news')" data-i18n="navNews">Новости</a>
                     <a class="header-nav-link" id="navFaq" onclick="switchTerminalTab('faq')" data-i18n="navFaq">FAQ</a>
                     <a class="header-nav-link" id="navSupport" onclick="openFeedback()" data-i18n="navSupport">Поддержка</a>
                     
                     <div class="com-dropdown-container">
                         <a class="header-nav-link" id="navCom" onclick="toggleComDropdown()" data-i18n="navCom">Com ▾</a>
                         <div class="com-dropdown" id="comDropdown">
-                            <a href="https://t.me/simplefutures_ru" target="_blank" class="com-dropdown-item">
-                                <span class="com-dropdown-text">Telegram RU <span class="com-arrow">↗</span></span>
-                            </a>
-                            <a href="https://t.me/simplefutures_eng" target="_blank" class="com-dropdown-item">
-                                <span class="com-dropdown-text">Telegram ENG <span class="com-arrow">↗</span></span>
+                            <a href="https://x.com/SimpleFutures" target="_blank" class="com-dropdown-item">
+                                <span class="com-dropdown-text">X (Twitter) <span class="com-arrow">↗</span></span>
                             </a>
                         </div>
                     </div>
@@ -717,16 +713,6 @@
             </div>
         </div>
 
-        <div id="terminal-news-view" style="display: none; padding: 40px 20px; overflow-y: auto; flex: 1; background-color: #0c0d10;">
-            <div class="faq-wrapper" style="max-width:1200px;">
-                <h2 class="faq-title" data-i18n="navNews">Новости</h2>
-                <div id="xNewsWidgetPlaceholder" style="color:#848e9c; font-size:13px; line-height:1.6; padding:24px; border:1px solid #1e2026; border-radius:8px;">
-                    Загрузка новостей...
-                </div>
-                <div id="xNewsWidgetContainer" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap:20px; align-items:start;"></div>
-            </div>
-        </div>
-
         <div id="terminal-pnl-view" style="display: none; padding: 40px 20px; overflow-y: auto; flex: 1; background-color: #0c0d10;">
             <div class="faq-wrapper">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
@@ -952,7 +938,7 @@
                 faqQ4: '4. Есть ли демо-режим?', faqA4: 'Да. В демо-режиме доступен тот же интерфейс без подключения кошелька — со стартовым виртуальным балансом $10,000. Ничего не отправляется в блокчейн, поэтому можно свободно потренироваться перед реальной торговлей.',
                 faqQ5: '5. Какая комиссия за сделки?', faqA5: 'Комиссии (открытие/закрытие позиции, funding и borrowing) устанавливает сам протокол GMX и зависят от текущего рынка — мы их не меняем и не берём дополнительную комиссию сверху.',
                 faqQ6: '6. Как работают Take Profit / Stop Loss?', faqA6: 'Вы задаёте цену TP и/или SL для открытой позиции кнопкой TP/SL в таблице позиций. Ордер размещается напрямую в сети и исполняется GMX Keeper\'ом автоматически при достижении заданной цены.',
-                navNews: 'Новости', navFaq: 'FAQ', navSupport: 'Поддержка', navCom: 'Com ▾',
+                navFaq: 'FAQ', navSupport: 'Поддержка', navCom: 'Com ▾',
                 tickerChange24h: 'Изменение 24ч', tickerHigh24h: 'Макс 24ч', tickerLow24h: 'Мин 24ч', tickerVol24h: 'Объем 24ч (USDT)',
                 available: 'Доступно:', marketTab: 'Рыночный', limitTab: 'Лимитный',
                 marginSize: 'Размер маржи', leverage: 'Кредитное плечо', orderPrice: 'Цена ордера',
@@ -983,7 +969,7 @@
                 faqQ4: '4. Is there a demo mode?', faqA4: 'Yes. Demo mode gives you the same interface without connecting a wallet — with a starting virtual balance of $10,000. Nothing is sent to the blockchain, so it\'s a safe way to practice before trading for real.',
                 faqQ5: '5. What are the trading fees?', faqA5: 'Fees (opening/closing a position, funding, and borrowing) are set by the GMX protocol itself and depend on current market conditions — we don\'t change them or add anything on top.',
                 faqQ6: '6. How do Take Profit / Stop Loss work?', faqA6: 'You set a TP and/or SL price for an open position using the TP/SL button in the positions table. The order is placed directly on-chain and is executed automatically by a GMX Keeper once the target price is reached.',
-                navNews: 'News', navFaq: 'FAQ', navSupport: 'Support', navCom: 'Com ▾',
+                navFaq: 'FAQ', navSupport: 'Support', navCom: 'Com ▾',
                 tickerChange24h: '24h Change', tickerHigh24h: '24h High', tickerLow24h: '24h Low', tickerVol24h: '24h Volume (USDT)',
                 available: 'Available:', marketTab: 'Market', limitTab: 'Limit',
                 marginSize: 'Margin size', leverage: 'Leverage', orderPrice: 'Order price',
@@ -1323,79 +1309,22 @@
             }
         }
 
-        // Individual X (Twitter) tweet embeds for the Новости tab. `createTweet` (single-tweet
-        // embed) uses X's standard oEmbed-based embed path and is far more reliable than
-        // `createTimeline` (whole-profile embed) — the latter goes through X's separate
-        // "syndication" endpoint, which has become heavily rate-limited (frequent 429s) for a
-        // lot of accounts, especially newer/smaller ones. Since there are only a handful of
-        // tweets to show, embedding each one directly sidesteps that entirely.
-        // To add a tweet: open it on x.com, copy the numeric ID from the URL
-        // (x.com/handle/status/1234567890123456789 -> take "1234567890123456789") and paste it
-        // between the quotes below, newest first. Empty slots are skipped automatically, and
-        // you can add more lines the same way if you post more than 6.
-        const NEWS_TWEET_IDS = [
-            "2090083912147992829",
-            "2089741129411350715",
-            "2089454810890199076",
-            "",
-            "",
-            "",
-        ].filter(Boolean);
-        let xWidgetLoaded = false;
-        function loadNewsWidget() {
-            if (xWidgetLoaded) return;
-            const placeholder = document.getElementById('xNewsWidgetPlaceholder');
-            const container = document.getElementById('xNewsWidgetContainer');
-            if (!NEWS_TWEET_IDS.length) {
-                placeholder.style.display = 'block';
-                placeholder.textContent = 'Новостей пока нет — впишите ID твитов в переменную NEWS_TWEET_IDS в коде сайта.';
-                return;
-            }
-            xWidgetLoaded = true;
-            placeholder.style.display = 'none';
-            const finish = () => {
-                container.innerHTML = '';
-                let failedCount = 0;
-                NEWS_TWEET_IDS.forEach(id => {
-                    const slot = document.createElement('div');
-                    slot.style.marginBottom = '16px';
-                    container.appendChild(slot);
-                    window.twttr.widgets.createTweet(id, slot, { theme: 'dark', dnt: true }).catch(e => {
-                        console.error(`[X widget] Не удалось загрузить твит ${id}:`, e);
-                        failedCount++;
-                        if (failedCount === NEWS_TWEET_IDS.length) {
-                            placeholder.style.display = 'block';
-                            placeholder.textContent = 'Не удалось загрузить твиты. Проверьте ID и что аккаунт публичный.';
-                        }
-                    });
-                });
-            };
-            if (window.twttr && window.twttr.widgets) { finish(); return; }
-            const s = document.createElement('script');
-            s.src = 'https://platform.twitter.com/widgets.js';
-            s.async = true;
-            s.onload = finish;
-            s.onerror = () => {
-                placeholder.style.display = 'block';
-                placeholder.textContent = 'Не удалось загрузить скрипт X (заблокирован сетью/расширением?).';
-                xWidgetLoaded = false;
-            };
-            document.head.appendChild(s);
-        }
-
+        // Self-hosted "news" posts for the Новости tab — no third-party X widget involved, so no
+        // 550px width cap, no 429 rate limits, and it renders in the site's own dark theme.
+        // To add a post: copy the tweet text into `text` (\n for line breaks), and optionally:
+        //   - image: a path/URL to an image (e.g. an uploaded screenshot) to show under the text
+        //   - link: the tweet's URL, shown as "Читать в X →" (leave "" to omit the link)
+        // Leave a slot's `text` empty to skip it. Newest post first.
         function switchTerminalTab(tab) {
             document.getElementById('navTrade').classList.remove('active');
             document.getElementById('navFaq').classList.remove('active');
-            document.getElementById('navNews').classList.remove('active');
 
             document.getElementById('terminal-trade-view').style.display = 'none';
             document.getElementById('terminal-faq-view').style.display = 'none';
-            document.getElementById('terminal-news-view').style.display = 'none';
             document.getElementById('terminal-pnl-view').style.display = 'none';
 
             if (tab === 'trade') { document.getElementById('navTrade').classList.add('active'); document.getElementById('terminal-trade-view').style.display = 'flex'; }
             else if (tab === 'faq') { document.getElementById('navFaq').classList.add('active'); document.getElementById('terminal-faq-view').style.display = 'flex'; }
-            else if (tab === 'news') { document.getElementById('navNews').classList.add('active'); document.getElementById('terminal-news-view').style.display = 'flex'; loadNewsWidget(); }
         }
 
         function openPnlPage() {
@@ -1404,10 +1333,8 @@
             openTerminal();
             document.getElementById('navTrade').classList.remove('active');
             document.getElementById('navFaq').classList.remove('active');
-            document.getElementById('navNews').classList.remove('active');
             document.getElementById('terminal-trade-view').style.display = 'none';
             document.getElementById('terminal-faq-view').style.display = 'none';
-            document.getElementById('terminal-news-view').style.display = 'none';
             document.getElementById('terminal-pnl-view').style.display = 'flex';
             renderPnlPage();
         }
