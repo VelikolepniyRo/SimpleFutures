@@ -471,11 +471,11 @@
                     <span id="notificationBadge" class="notification-badge">0</span>
                 </button>
                 <div class="notification-dropdown" id="notificationDropdown">
-                    <div class="dropdown-header" style="color: #eaecef; font-weight: bold; font-size: 13px; text-align: left; padding: 12px 16px;">
+                    <div class="dropdown-header" style="color: #eaecef; font-weight: bold; font-size: 13px; text-align: left; padding: 12px 16px;" data-i18n="notifHeader">
                         Уведомления
                     </div>
                     <div class="notif-list-container" id="notificationList">
-                        <div id="emptyNotifs" style="padding: 20px; text-align: center; color: #848e9c; font-size: 12px;">
+                        <div id="emptyNotifs" style="padding: 20px; text-align: center; color: #848e9c; font-size: 12px;" data-i18n="notifEmpty">
                             Уведомления отсутствуют
                         </div>
                     </div>
@@ -736,41 +736,41 @@
         <div id="terminal-pnl-view" style="display: none; padding: 40px 20px; overflow-y: auto; flex: 1; background-color: #0c0d10;">
             <div class="faq-wrapper">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                    <h2 class="faq-title" style="margin-bottom:0;">Статистика PnL</h2>
-                    <button class="btn-outline" style="padding:6px 12px; font-size:12px;" onclick="openStatsShareModal()">Поделиться ↗</button>
+                    <h2 class="faq-title" style="margin-bottom:0;" data-i18n="statsTitle">Статистика PnL</h2>
+                    <button class="btn-outline" style="padding:6px 12px; font-size:12px;" onclick="openStatsShareModal()" data-i18n="statsShareBtn">Поделиться ↗</button>
                 </div>
-                <div id="pnlRealHint" style="display:none; color:#848e9c; font-size:12.5px; background:#161a1e; border:1px solid #1e2026; border-radius:6px; padding:12px 14px; margin-bottom:20px; line-height:1.5;">
+                <div id="pnlRealHint" style="display:none; color:#848e9c; font-size:12.5px; background:#161a1e; border:1px solid #1e2026; border-radius:6px; padding:12px 14px; margin-bottom:20px; line-height:1.5;" data-i18n-html="statsRealHint">
                     Не удалось загрузить историю закрытых сделок для реального кошелька (индексатор GMX недоступен или изменил формат данных) — здесь показан только нереализованный PnL по текущим открытым позициям. Полную историю и статистику по кошельку можно посмотреть на <a href="#" id="pnlGmxStatsLink" target="_blank" style="color:#FFC700;">app.gmx.io</a>.
                 </div>
                 <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 20px;">
                     <div style="background:#161a1e; border:1px solid #1e2026; border-radius:8px; padding:16px;">
-                        <div style="color:#848e9c; font-size:11.5px; margin-bottom:6px;">Нереализованный PnL</div>
+                        <div style="color:#848e9c; font-size:11.5px; margin-bottom:6px;" data-i18n="statsUnrealized">Нереализованный PnL</div>
                         <div id="pnlUnrealized" style="font-size:20px; font-weight:700; font-family:monospace;">$0.00</div>
                     </div>
                     <div id="pnlRealizedCard" style="background:#161a1e; border:1px solid #1e2026; border-radius:8px; padding:16px;">
-                        <div style="color:#848e9c; font-size:11.5px; margin-bottom:6px;">Реализованный PnL</div>
+                        <div style="color:#848e9c; font-size:11.5px; margin-bottom:6px;" data-i18n="statsRealized">Реализованный PnL</div>
                         <div id="pnlRealized" style="font-size:20px; font-weight:700; font-family:monospace;">$0.00</div>
                     </div>
                     <div id="pnlWinrateCard" style="background:#161a1e; border:1px solid #1e2026; border-radius:8px; padding:16px;">
-                        <div style="color:#848e9c; font-size:11.5px; margin-bottom:6px;">Винрейт</div>
+                        <div style="color:#848e9c; font-size:11.5px; margin-bottom:6px;" data-i18n="statsWinrate">Винрейт</div>
                         <div id="pnlWinrate" style="font-size:20px; font-weight:700; font-family:monospace;">—</div>
                     </div>
                     <div id="pnlTradesCard" style="background:#161a1e; border:1px solid #1e2026; border-radius:8px; padding:16px;">
-                        <div style="color:#848e9c; font-size:11.5px; margin-bottom:6px;">Сделок закрыто</div>
+                        <div style="color:#848e9c; font-size:11.5px; margin-bottom:6px;" data-i18n="statsTradesClosed">Сделок закрыто</div>
                         <div id="pnlTradesCount" style="font-size:20px; font-weight:700; font-family:monospace;">0</div>
                     </div>
                     <div id="pnlVolumeCard" style="background:#161a1e; border:1px solid #1e2026; border-radius:8px; padding:16px;">
-                        <div style="color:#848e9c; font-size:11.5px; margin-bottom:6px;">Объём (закрытые сделки)</div>
+                        <div style="color:#848e9c; font-size:11.5px; margin-bottom:6px;" data-i18n="statsVolumeClosed">Объём (закрытые сделки)</div>
                         <div id="pnlVolume" style="font-size:20px; font-weight:700; font-family:monospace;">$0.00</div>
                     </div>
                 </div>
                 <div id="pnlCurveCard" style="background:#161a1e; border:1px solid #1e2026; border-radius:8px; padding:16px; margin-bottom:24px;">
-                    <div style="color:#848e9c; font-size:11.5px; margin-bottom:10px;">Кривая накопленного PnL по закрытым сделкам</div>
+                    <div style="color:#848e9c; font-size:11.5px; margin-bottom:10px;" data-i18n="statsCurveLabel">Кривая накопленного PnL по закрытым сделкам</div>
                     <div id="pnlCurveBox" style="width:100%; height:180px;"></div>
                 </div>
-                <h3 style="color:#eaecef; font-size:14px; margin-bottom:10px;">Открытые позиции сейчас</h3>
+                <h3 style="color:#eaecef; font-size:14px; margin-bottom:10px;" data-i18n="statsOpenPositionsNow">Открытые позиции сейчас</h3>
                 <div id="pnlOpenPositionsList" style="display:flex; flex-direction:column; gap:8px;"></div>
-                <div id="pnlEmptyOpen" style="color:#5b6472; font-size:12.5px;">Нет открытых позиций.</div>
+                <div id="pnlEmptyOpen" style="color:#5b6472; font-size:12.5px;" data-i18n="statsEmptyOpen">Нет открытых позиций.</div>
             </div>
         </div>
     </div>
@@ -833,15 +833,15 @@
                 <div id="shareCardPnl" style="font-size:34px; font-weight:800; margin-bottom:20px; font-family:monospace;">+0.00 USDT</div>
                 <div style="display:grid; grid-template-columns:1fr 1fr; row-gap:16px; column-gap:12px; font-size:12px;">
                     <div>
-                        <div style="color:#848e9c; margin-bottom:4px;">Цена входа</div>
+                        <div style="color:#848e9c; margin-bottom:4px;" data-i18n="cardEntryPrice">Цена входа</div>
                         <div id="shareCardEntry" style="color:#eaecef; font-size:14px; font-weight:600;">-</div>
                     </div>
                     <div>
-                        <div style="color:#848e9c; margin-bottom:4px;">Цена маркировки</div>
+                        <div style="color:#848e9c; margin-bottom:4px;" data-i18n="cardMarkPrice">Цена маркировки</div>
                         <div id="shareCardMark" style="color:#eaecef; font-size:14px; font-weight:600;">-</div>
                     </div>
                     <div>
-                        <div style="color:#848e9c; margin-bottom:4px;">Плечо</div>
+                        <div style="color:#848e9c; margin-bottom:4px;" data-i18n="cardLeverage">Плечо</div>
                         <div id="shareCardLeverage" style="color:#eaecef; font-size:14px; font-weight:600;">-</div>
                     </div>
                     <div>
@@ -851,8 +851,8 @@
                 </div>
             </div>
             <div style="display:flex; gap:8px; margin-top:14px;">
-                <button class="btn-outline" style="flex:1; padding:8px;" onclick="downloadShareCard()">Скачать PNG</button>
-                <button class="btn-outline" style="flex:1; padding:8px;" onclick="closeShareModal()">Закрыть</button>
+                <button class="btn-outline" style="flex:1; padding:8px;" onclick="downloadShareCard()" data-i18n="cardDownloadPng">Скачать PNG</button>
+                <button class="btn-outline" style="flex:1; padding:8px;" onclick="closeShareModal()" data-i18n="cardClose">Закрыть</button>
             </div>
         </div>
     </div>
@@ -862,30 +862,30 @@
             <div id="statsShareCard" style="background:#0c0d10; border-radius:10px; padding:24px; color:#eaecef; border:1px solid #1e2026; position:relative;">
                 <div id="statsShareCardDemoBadge" style="display:none; position:absolute; top:16px; right:16px; font-size:11px; font-weight:800; background:#FFC700; color:#0c0d10; padding:3px 8px; border-radius:4px; letter-spacing:0.5px;">DEMO</div>
                 <div style="font-weight:800; font-size:19px; color:#FFC700; margin-bottom:14px;">SimpleFutures</div>
-                <div style="font-size:14px; color:#848e9c; margin-bottom:6px;">Итоговый PnL</div>
+                <div style="font-size:14px; color:#848e9c; margin-bottom:6px;" data-i18n="cardTotalPnl">Итоговый PnL</div>
                 <div id="statsShareCardPnl" style="font-size:34px; font-weight:800; margin-bottom:20px; font-family:monospace;">+0.00 USDT</div>
                 <div style="display:grid; grid-template-columns:1fr 1fr; row-gap:16px; column-gap:12px; font-size:12px;">
                     <div>
-                        <div style="color:#848e9c; margin-bottom:4px;">Объём</div>
+                        <div style="color:#848e9c; margin-bottom:4px;" data-i18n="cardVolume">Объём</div>
                         <div id="statsShareCardVolume" style="color:#eaecef; font-size:14px; font-weight:600;">-</div>
                     </div>
                     <div>
-                        <div style="color:#848e9c; margin-bottom:4px;">Сделок</div>
+                        <div style="color:#848e9c; margin-bottom:4px;" data-i18n="cardTrades">Сделок</div>
                         <div id="statsShareCardTrades" style="color:#eaecef; font-size:14px; font-weight:600;">-</div>
                     </div>
                     <div>
-                        <div style="color:#848e9c; margin-bottom:4px;">Винрейт</div>
+                        <div style="color:#848e9c; margin-bottom:4px;" data-i18n="statsWinrate">Винрейт</div>
                         <div id="statsShareCardWinrate" style="color:#eaecef; font-size:14px; font-weight:600;">-</div>
                     </div>
                     <div>
-                        <div style="color:#848e9c; margin-bottom:4px;">Открыто сейчас</div>
+                        <div style="color:#848e9c; margin-bottom:4px;" data-i18n="cardOpenNow">Открыто сейчас</div>
                         <div id="statsShareCardUnrealized" style="font-size:14px; font-weight:600;">-</div>
                     </div>
                 </div>
             </div>
             <div style="display:flex; gap:8px; margin-top:14px;">
-                <button class="btn-outline" style="flex:1; padding:8px;" onclick="downloadStatsShareCard()">Скачать PNG</button>
-                <button class="btn-outline" style="flex:1; padding:8px;" onclick="closeStatsShareModal()">Закрыть</button>
+                <button class="btn-outline" style="flex:1; padding:8px;" onclick="downloadStatsShareCard()" data-i18n="cardDownloadPng">Скачать PNG</button>
+                <button class="btn-outline" style="flex:1; padding:8px;" onclick="closeStatsShareModal()" data-i18n="cardClose">Закрыть</button>
             </div>
         </div>
     </div>
@@ -962,6 +962,17 @@
                 feedbackEmailLabel: 'Ваш Email', feedbackMessageLabel: 'Сообщение', feedbackMessagePlaceholder: 'Опишите ваши впечатления или предложения...',
                 feedbackSubmitBtn: 'Отправить', feedbackSubmitting: 'Отправка...',
                 feedbackThanks: 'Спасибо за отзыв!', feedbackRedirect: 'Возвращаем вас обратно через <span id="fsCountdown">3</span>...',
+                notifHeader: 'Уведомления', notifEmpty: 'Уведомления отсутствуют',
+                notifTitleLimitPlaced: 'Лимитный ордер размещён', notifTitleDemoOpened: 'Демо-сделка открыта', notifTitleOrderCreated: 'Ордер создан',
+                notifTitleDemoLiquidated: 'Демо-позиция ликвидирована', notifTitleDemoClosed: 'Демо-позиция закрыта', notifTitleLimitFilled: 'Лимитный ордер исполнен',
+                notifTitleClosePosition: 'Закрытие позиции', notifTitleTpSlSet: 'TP/SL установлены', notifSuffixOrderSent: 'ордер отправлен',
+                statsTitle: 'Статистика PnL', statsShareBtn: 'Поделиться ↗',
+                statsRealHint: 'Не удалось загрузить историю закрытых сделок для реального кошелька (индексатор GMX недоступен или изменил формат данных) — здесь показан только нереализованный PnL по текущим открытым позициям. Полную историю и статистику по кошельку можно посмотреть на <a href="#" id="pnlGmxStatsLink" target="_blank" style="color:#FFC700;">app.gmx.io</a>.',
+                statsUnrealized: 'Нереализованный PnL', statsRealized: 'Реализованный PnL', statsWinrate: 'Винрейт',
+                statsTradesClosed: 'Сделок закрыто', statsVolumeClosed: 'Объём (закрытые сделки)',
+                statsCurveLabel: 'Кривая накопленного PnL по закрытым сделкам', statsOpenPositionsNow: 'Открытые позиции сейчас', statsEmptyOpen: 'Нет открытых позиций.',
+                cardEntryPrice: 'Цена входа', cardMarkPrice: 'Цена маркировки', cardLeverage: 'Плечо',
+                cardDownloadPng: 'Скачать PNG', cardClose: 'Закрыть', cardTotalPnl: 'Итоговый PnL', cardVolume: 'Объём', cardTrades: 'Сделок', cardOpenNow: 'Открыто сейчас',
                 navFaq: 'FAQ', navSupport: 'Поддержка', navCom: 'Com ▾',
                 tickerChange24h: 'Изменение 24ч', tickerHigh24h: 'Макс 24ч', tickerLow24h: 'Мин 24ч', tickerVol24h: 'Объем 24ч (USDT)',
                 available: 'Доступно:', marketTab: 'Рыночный', limitTab: 'Лимитный',
@@ -997,6 +1008,17 @@
                 feedbackEmailLabel: 'Your Email', feedbackMessageLabel: 'Message', feedbackMessagePlaceholder: 'Describe your experience or suggestions...',
                 feedbackSubmitBtn: 'Send', feedbackSubmitting: 'Sending...',
                 feedbackThanks: 'Thanks for your feedback!', feedbackRedirect: 'Taking you back in <span id="fsCountdown">3</span>...',
+                notifHeader: 'Notifications', notifEmpty: 'No notifications',
+                notifTitleLimitPlaced: 'Limit order placed', notifTitleDemoOpened: 'Demo trade opened', notifTitleOrderCreated: 'Order created',
+                notifTitleDemoLiquidated: 'Demo position liquidated', notifTitleDemoClosed: 'Demo position closed', notifTitleLimitFilled: 'Limit order filled',
+                notifTitleClosePosition: 'Closing position', notifTitleTpSlSet: 'TP/SL set', notifSuffixOrderSent: 'order sent',
+                statsTitle: 'PnL Statistics', statsShareBtn: 'Share ↗',
+                statsRealHint: 'Couldn\'t load closed-trade history for this real wallet (the GMX indexer is unavailable or changed its data format) — only unrealized PnL from currently open positions is shown here. You can see full history and stats for this wallet on <a href="#" id="pnlGmxStatsLink" target="_blank" style="color:#FFC700;">app.gmx.io</a>.',
+                statsUnrealized: 'Unrealized PnL', statsRealized: 'Realized PnL', statsWinrate: 'Win rate',
+                statsTradesClosed: 'Trades closed', statsVolumeClosed: 'Volume (closed trades)',
+                statsCurveLabel: 'Cumulative PnL curve for closed trades', statsOpenPositionsNow: 'Open positions right now', statsEmptyOpen: 'No open positions.',
+                cardEntryPrice: 'Entry price', cardMarkPrice: 'Mark price', cardLeverage: 'Leverage',
+                cardDownloadPng: 'Download PNG', cardClose: 'Close', cardTotalPnl: 'Total PnL', cardVolume: 'Volume', cardTrades: 'Trades', cardOpenNow: 'Open now',
                 navFaq: 'FAQ', navSupport: 'Support', navCom: 'Com ▾',
                 tickerChange24h: '24h Change', tickerHigh24h: '24h High', tickerLow24h: '24h Low', tickerVol24h: '24h Volume (USDT)',
                 available: 'Available:', marketTab: 'Market', limitTab: 'Limit',
@@ -2054,7 +2076,7 @@
                 currentUsdtBalance = demoBalance;
                 renderBalanceDisplays();
                 setStatusBox(`<span style="color:#00c087;">✅ Лимитный ордер размещён: ${currentSymbol}/USDT ${isLong ? 'Long' : 'Short'} ${levVal}x по цене ${limitPriceUsd}. Сработает при достижении цены.</span>`);
-                addNotification('Лимитный ордер размещён', `${currentSymbol}/USDT ${isLong ? 'Long' : 'Short'} ${levVal}x @ ${limitPriceUsd}`);
+                addNotification(t('notifTitleLimitPlaced'), `${currentSymbol}/USDT ${isLong ? 'Long' : 'Short'} ${levVal}x @ ${limitPriceUsd}`);
                 refreshOrders();
                 return;
             }
@@ -2081,7 +2103,7 @@
             renderBalanceDisplays();
 
             setStatusBox(`<span style="color:#00c087;">✅ Демо-сделка открыта: ${currentSymbol}/USDT ${isLong ? 'Long' : 'Short'} ${levVal}x (маржа ${netMargin.toFixed(2)} USDT после комиссии)</span>`);
-            addNotification('Демо-сделка открыта', `${currentSymbol}/USDT ${isLong ? 'Long' : 'Short'} ${levVal}x`);
+            addNotification(t('notifTitleDemoOpened'), `${currentSymbol}/USDT ${isLong ? 'Long' : 'Short'} ${levVal}x`);
             refreshPositions();
         }
 
@@ -2164,7 +2186,7 @@
                 setStatusBox(isLimit
                     ? `<span style="color: #00c087;">✅ Лимитный ордер размещён on-chain — сработает, когда цена достигнет ${limitPriceUsd}. Проверить/отменить можно на app.gmx.io тем же кошельком (вкладка Orders).</span>`
                     : `<span style="color: #00c087;">✅ Ордер создан и отправлен на исполнение! Позиции GMX можно также проверить на app.gmx.io тем же кошельком.</span>`);
-                addNotification('Ордер создан', `${currentSymbol}/USDT ${isLong ? 'Long' : 'Short'} ${levVal}x`);
+                addNotification(t('notifTitleOrderCreated'), `${currentSymbol}/USDT ${isLong ? 'Long' : 'Short'} ${levVal}x`);
                 updateWalletBalance();
             } catch (err) {
                 setStatusBox(`<span style="color: #f84960;">❌ Ошибка: ${getFriendlyTxError(err)}</span><br><span style="color:#848e9c; font-size:11px;">Откройте консоль браузера (F12 → Console) — там сохранены точные данные транзакции для диагностики через Tenderly.</span>`);
@@ -2391,7 +2413,7 @@
                     pnl: isLiquidated ? -p.margin : (pnl - closeFeeUsd), isLiquidated
                 });
                 const label = isLiquidated ? 'ликвидирована' : (reason === 'tp' ? 'закрыта по Take Profit' : 'закрыта по Stop Loss');
-                addNotification(isLiquidated ? 'Демо-позиция ликвидирована' : 'Демо-позиция закрыта', `${p.asset}/USDT ${p.isLong ? 'Long' : 'Short'} ${p.leverage}x — ${label}`);
+                addNotification(isLiquidated ? t('notifTitleDemoLiquidated') : t('notifTitleDemoClosed'), `${p.asset}/USDT ${p.isLong ? 'Long' : 'Short'} ${p.leverage}x — ${label}`);
                 changed = true;
             });
             if (changed) {
@@ -2422,7 +2444,7 @@
                     takeProfit: o.takeProfit, stopLoss: o.stopLoss,
                     isOpen: true, openedAt: Date.now()
                 });
-                addNotification('Лимитный ордер исполнен', `${o.asset}/USDT ${o.isLong ? 'Long' : 'Short'} ${o.leverage}x @ ${o.limitPrice}`);
+                addNotification(t('notifTitleLimitFilled'), `${o.asset}/USDT ${o.isLong ? 'Long' : 'Short'} ${o.leverage}x @ ${o.limitPrice}`);
                 o._fill = true;
                 changed = true;
             });
@@ -2507,7 +2529,7 @@
 
             const net = pnl - closeFeeUsd;
             setStatusBox(`<span style="color:${net >= 0 ? '#00c087' : '#f84960'};">✅ Демо-позиция закрыта, ${net >= 0 ? '+' : ''}${net.toFixed(2)} USDT.</span>`);
-            addNotification('Демо-позиция закрыта', `${p.asset}/USDT ${p.isLong ? 'Long' : 'Short'} ${p.leverage}x`);
+            addNotification(t('notifTitleDemoClosed'), `${p.asset}/USDT ${p.isLong ? 'Long' : 'Short'} ${p.leverage}x`);
             refreshPositions();
             refreshHistory();
         }
@@ -2744,7 +2766,7 @@
                 setStatusBox(`🚀 Отправлено. <a href="https://arbiscan.io/tx/${tx.hash}" target="_blank" style="color:#f0b90b;">Arbiscan</a> — ожидает исполнения keeper'ом...`);
                 await tx.wait();
                 setStatusBox(`<span style="color: #00c087;">✅ Ордер на закрытие отправлен на исполнение!</span>`);
-                addNotification('Закрытие позиции', `${pos.asset}/USDT ${pos.isLong ? 'Long' : 'Short'} — ордер отправлен`);
+                addNotification(t('notifTitleClosePosition'), `${pos.asset}/USDT ${pos.isLong ? 'Long' : 'Short'} — ${t('notifSuffixOrderSent')}`);
                 if (pos._raw && pos._raw.marketAddress) delete knownRealTpSl[`${pos._raw.marketAddress.toLowerCase()}_${pos.isLong}`];
                 setTimeout(() => { updateWalletBalance(); refreshPositions(); }, 3000);
             } catch (err) {
@@ -2937,7 +2959,7 @@
                     await submitTpSlOrder(pos, ORDER_TYPE_STOP_LOSS_DECREASE, sl, 'Stop Loss');
                 }
                 setStatusBox(`<span style="color:#00c087;">✅ TP/SL ордер(ы) размещены и ждут исполнения GMX keeper'ом при достижении цены.</span>`);
-                addNotification('TP/SL установлены', `${pos.asset}/USDT ${pos.isLong ? 'Long' : 'Short'}`);
+                addNotification(t('notifTitleTpSlSet'), `${pos.asset}/USDT ${pos.isLong ? 'Long' : 'Short'}`);
                 if (pos._raw && pos._raw.marketAddress) {
                     const tpSlKey = `${pos._raw.marketAddress.toLowerCase()}_${pos.isLong}`;
                     const prev = knownRealTpSl[tpSlKey] || {};
