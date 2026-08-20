@@ -782,43 +782,19 @@
         </div>
         
         <div id="walletMainView" class="wallet-view active">
-            <div class="network-address-card" id="net-card-eth">
-                <div class="net-card-left">
-                    <div class="net-badge badge-eth">Ξ</div>
-                    <div class="net-info-text">
-                        <span class="net-info-name">Arbitrum One</span>
-                        <span class="net-info-addr" id="displayWalletAddressEth">Не подключен</span>
-                    </div>
-                </div>
-                <button class="micro-copy-btn" onclick="event.stopPropagation(); copyNetworkAddress('eth', this)">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                </button>
-            </div>
-
             <div class="wallet-action-btns">
-                <a class="wallet-action-btn deposit-btn" style="text-decoration:none; text-align:center; display:block;" id="gmxStatsLink" href="https://app.gmx.io/#/accounts/" target="_blank" rel="noopener">Статистика на GMX ↗</a>
+                <a class="wallet-action-btn deposit-btn" style="text-decoration:none; text-align:center; display:block;" id="arbiscanLink" href="https://arbiscan.io/address/" target="_blank" rel="noopener" data-i18n="walletOpenExplorer">Открыть в Arbiscan ↗</a>
             </div>
-            <p style="color:#848e9c; font-size:10.5px; margin-top:-4px;">Объём торгов и PnL по этому кошельку — на официальной странице GMX (открывает в новой вкладке), пока мы не подключили собственное чтение через Reader-контракт.</p>
-
-            <p class="sidebar-disclaimer">Некастодиальное подключение: приложение никогда не имеет доступа к вашим приватным ключам, все транзакции подписываются в вашем кошельке (MetaMask / Trust Wallet).</p>
-
-            <h4 class="assets-section-title">Активы кошелька</h4>
-            <div class="assets-list-container">
-                <div class="asset-row-item">
-                    <div class="asset-row-left">
-                        <img src="https://cdn.jsdelivr.net/npm/cryptocurrency-icons@0.18.1/svg/color/eth.svg" class="asset-avatar" onerror="this.onerror=null;">
-                        <div class="asset-text-nodes"><span class="asset-ticker">ETH</span><span class="asset-fullname">Ethereum</span></div>
-                    </div>
-                    <div class="asset-row-right"><span class="asset-calc-crypto" id="asset-eth-val">0.0000</span><span class="asset-calc-fiat" id="asset-eth-fiat">$0.00</span></div>
-                </div>
-                <div class="asset-row-item">
-                    <div class="asset-row-left">
-                        <img src="https://cdn.jsdelivr.net/npm/cryptocurrency-icons@0.18.1/svg/color/usdt.svg" class="asset-avatar" onerror="this.onerror=null;">
-                        <div class="asset-text-nodes"><span class="asset-ticker">USDT</span><span class="asset-fullname">Tether USD</span></div>
-                    </div>
-                    <div class="asset-row-right"><span class="asset-calc-crypto" id="asset-usdt-val">0.00</span><span class="asset-calc-fiat" id="asset-usdt-fiat">$0.00</span></div>
-                </div>
+            <div class="wallet-action-btns">
+                <a class="wallet-action-btn deposit-btn" style="text-decoration:none; text-align:center; display:block;" id="gmxStatsLink" href="https://app.gmx.io/#/accounts/" target="_blank" rel="noopener" data-i18n="walletGmxStats">Статистика на GMX ↗</a>
             </div>
+            <p style="color:#848e9c; font-size:10.5px; margin-top:-4px;" data-i18n="walletGmxStatsHint">Объём торгов и PnL по этому кошельку — на официальной странице GMX (открывает в новой вкладке), пока мы не подключили собственное чтение через Reader-контракт.</p>
+
+            <p class="sidebar-disclaimer" data-i18n="walletDisclaimer">Некастодиальное подключение: приложение никогда не имеет доступа к вашим приватным ключам, все транзакции подписываются в вашем кошельке (MetaMask / Trust Wallet).</p>
+
+            <h4 class="assets-section-title" data-i18n="walletAssetsTitle">Активы кошелька</h4>
+            <div class="assets-list-container" id="walletAssetsList"></div>
+            <div id="walletAssetsEmpty" style="display:none; color:#5b6472; font-size:12px; padding:8px 2px;" data-i18n="walletAssetsEmpty">На этом кошельке пока нет активов.</div>
         </div>
 
     </div>
@@ -976,6 +952,10 @@
                 statsCurveEmpty: 'Пока нет закрытых сделок для графика.',
                 dropdownWallet: 'Кошелек', dropdownManage: 'Управление', dropdownStats: 'Статистика',
                 dropdownResetDemo: 'Сбросить демо-счёт', dropdownDisconnect: 'Отключить кошелек',
+                walletOpenExplorer: 'Открыть в Arbiscan ↗', walletGmxStats: 'Статистика на GMX ↗',
+                walletGmxStatsHint: 'Объём торгов и PnL по этому кошельку — на официальной странице GMX (открывает в новой вкладке), пока мы не подключили собственное чтение через Reader-контракт.',
+                walletDisclaimer: 'Некастодиальное подключение: приложение никогда не имеет доступа к вашим приватным ключам, все транзакции подписываются в вашем кошельке (MetaMask / Trust Wallet).',
+                walletAssetsTitle: 'Активы кошелька', walletAssetsEmpty: 'На этом кошельке пока нет активов.',
                 navFaq: 'FAQ', navSupport: 'Поддержка', navCom: 'Com ▾',
                 tickerChange24h: 'Изменение 24ч', tickerHigh24h: 'Макс 24ч', tickerLow24h: 'Мин 24ч', tickerVol24h: 'Объем 24ч (USDT)',
                 available: 'Доступно:', marketTab: 'Рыночный', limitTab: 'Лимитный',
@@ -1025,6 +1005,10 @@
                 statsCurveEmpty: 'No closed trades yet for the chart.',
                 dropdownWallet: 'Wallet', dropdownManage: 'Manage', dropdownStats: 'Statistics',
                 dropdownResetDemo: 'Reset demo account', dropdownDisconnect: 'Disconnect wallet',
+                walletOpenExplorer: 'Open in Arbiscan ↗', walletGmxStats: 'Stats on GMX ↗',
+                walletGmxStatsHint: 'Trading volume and PnL for this wallet — on the official GMX page (opens in a new tab), until we hook up our own reads via the Reader contract.',
+                walletDisclaimer: 'Non-custodial connection: the app never has access to your private keys, all transactions are signed in your own wallet (MetaMask / Trust Wallet).',
+                walletAssetsTitle: 'Wallet assets', walletAssetsEmpty: 'This wallet has no assets yet.',
                 navFaq: 'FAQ', navSupport: 'Support', navCom: 'Com ▾',
                 tickerChange24h: '24h Change', tickerHigh24h: '24h High', tickerLow24h: '24h Low', tickerVol24h: '24h Volume (USDT)',
                 available: 'Available:', marketTab: 'Market', limitTab: 'Limit',
@@ -1126,7 +1110,7 @@
         }
         var pendingTradeConfirm = null;
         var pendingExecutionFeeWei = null;
-        var currentPrice = 0, currentSymbol = 'BTC', activeOrderType = 'market', cachedEthPrice = 3400, terminalInitialized = false, currentUsdtBalance = 0, currentEthBalance = 0;
+        var currentPrice = 0, currentSymbol = 'BTC', activeOrderType = 'market', cachedEthPrice = 3400, terminalInitialized = false, currentUsdtBalance = 0, currentEthBalance = 0, currentWbtcBalance = 0, currentArbBalance = 0;
 
         // ======================================================================================
         // GMX V2 protocol integration (Arbitrum One). This app is 100% non-custodial:
@@ -1236,6 +1220,10 @@
         // USDC via USDT_USDC_SWAP_MARKET below as part of the order. Also used by the simple
         // wallet-to-wallet send/withdraw widget.
         const USDT_ADDRESS = ethers.utils.getAddress("0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9".toLowerCase());
+        // Additional wallet-sidebar display tokens (Arbitrum One mainnet addresses) — used only to
+        // show what's actually in the connected wallet, not for trading/margin.
+        const WBTC_ADDRESS = ethers.utils.getAddress("0x2f2a2543B76A4166549F7aaB2e75Bef0aefC5B0f".toLowerCase());
+        const ARB_ADDRESS = ethers.utils.getAddress("0x912CE59144191C1204E64559FE8253a0e49E6548".toLowerCase());
         // GMX's own "SWAP-ONLY [USDC-USDT]" liquidity pool — confirmed live via GMX's public
         // /markets API (see chat). Used as the swapPath so your USDT margin is converted to USDC
         // by GMX itself as part of the same order, since GMX's perp markets hold USDC collateral.
@@ -3091,6 +3079,8 @@
             await resetCurrentSession();
             isDemoMode = false;
             currentUsdtBalance = 0;
+            currentWbtcBalance = 0;
+            currentArbBalance = 0;
             const btn = document.getElementById('connectBtn');
             btn.innerHTML = "Подключить кошелек";
             document.getElementById('profileBtn').style.display = 'none';
@@ -3105,11 +3095,41 @@
             document.getElementById('walletBalance').innerText = `${currentUsdtBalance.toFixed(2)} USDT`;
             document.getElementById('dropdownCrypto').innerText = `${currentEthBalance.toFixed(4)} ETH`;
             document.getElementById('dropdownFiat').innerText = `≈ $${totalPortfolioUsd.toFixed(2)}`;
-            document.getElementById('asset-eth-val').innerText = currentEthBalance.toFixed(4);
-            document.getElementById('asset-eth-fiat').innerText = `$${(currentEthBalance * cachedEthPrice).toFixed(2)}`;
-            document.getElementById('asset-usdt-val').innerText = currentUsdtBalance.toFixed(2);
-            document.getElementById('asset-usdt-fiat').innerText = `$${currentUsdtBalance.toFixed(2)}`;
             document.getElementById('maxMarginDisplay').innerText = currentUsdtBalance.toFixed(2);
+            renderWalletAssetsList();
+        }
+
+        // Only lists assets the connected wallet actually holds (balance > 0) — e.g. someone with
+        // just USDT sees only USDT; someone with ETH, WBTC, ARB and USDT sees all four. Values come
+        // from the live balances fetched in updateWalletBalance() and priced against the same
+        // Bybit spot feed (priceCache) already used for the trading pairs, falling back to
+        // cachedEthPrice for ETH specifically since that's tracked from the very first price tick.
+        function renderWalletAssetsList() {
+            const list = document.getElementById('walletAssetsList');
+            const emptyEl = document.getElementById('walletAssetsEmpty');
+            if (!list) return;
+            const assets = [
+                { ticker: 'ETH', name: 'Ethereum', icon: 'eth', amount: currentEthBalance, decimals: 4, price: priceCache['ETH'] || cachedEthPrice },
+                { ticker: 'WBTC', name: 'Wrapped Bitcoin', icon: 'btc', amount: currentWbtcBalance, decimals: 6, price: priceCache['BTC'] || 0 },
+                { ticker: 'ARB', name: 'Arbitrum', icon: 'arb', amount: currentArbBalance, decimals: 2, price: priceCache['ARB'] || 0 },
+                { ticker: 'USDT', name: 'Tether USD', icon: 'usdt', amount: currentUsdtBalance, decimals: 2, price: 1 },
+            ].filter(a => a.amount > 0);
+
+            if (!assets.length) {
+                list.innerHTML = '';
+                emptyEl.style.display = 'block';
+                return;
+            }
+            emptyEl.style.display = 'none';
+            list.innerHTML = assets.map(a => `
+                <div class="asset-row-item">
+                    <div class="asset-row-left">
+                        <img src="https://cdn.jsdelivr.net/npm/cryptocurrency-icons@0.18.1/svg/color/${a.icon}.svg" class="asset-avatar" onerror="this.onerror=null;">
+                        <div class="asset-text-nodes"><span class="asset-ticker">${a.ticker}</span><span class="asset-fullname">${a.name}</span></div>
+                    </div>
+                    <div class="asset-row-right"><span class="asset-calc-crypto">${a.amount.toFixed(a.decimals)}</span><span class="asset-calc-fiat">$${(a.amount * a.price).toFixed(2)}</span></div>
+                </div>
+            `).join('');
         }
 
         async function updateWalletBalance() {
@@ -3118,7 +3138,9 @@
             try {
                 const results = await Promise.allSettled([
                     provider.getBalance(userAddress),
-                    new ethers.Contract(USDT_ADDRESS, erc20ABI, provider).balanceOf(userAddress)
+                    new ethers.Contract(USDT_ADDRESS, erc20ABI, provider).balanceOf(userAddress),
+                    new ethers.Contract(WBTC_ADDRESS, erc20ABI, provider).balanceOf(userAddress),
+                    new ethers.Contract(ARB_ADDRESS, erc20ABI, provider).balanceOf(userAddress)
                 ]);
 
                 if (results[0].status === 'fulfilled') {
@@ -3126,6 +3148,12 @@
                 }
                 if (results[1].status === 'fulfilled') {
                     currentUsdtBalance = parseFloat(ethers.utils.formatUnits(results[1].value, 6));
+                }
+                if (results[2].status === 'fulfilled') {
+                    currentWbtcBalance = parseFloat(ethers.utils.formatUnits(results[2].value, 8));
+                }
+                if (results[3].status === 'fulfilled') {
+                    currentArbBalance = parseFloat(ethers.utils.formatEther(results[3].value));
                 }
 
                 renderBalanceDisplays();
@@ -3538,14 +3566,18 @@
             document.getElementById('walletSidebar').classList.add('open');
             document.getElementById('profileDropdown').classList.remove('active');
             switchWalletView('main');
-            document.getElementById('displayWalletAddressEth').innerText = isDemoMode
-                ? "Демо-режим (без кошелька)"
-                : (userAddress ? (userAddress.slice(0, 8) + '...' + userAddress.slice(-6)) : "Не подключен");
+            const arbiscanLink = document.getElementById('arbiscanLink');
             const statsLink = document.getElementById('gmxStatsLink');
-            if (statsLink) {
-                if (userAddress && !isDemoMode) { statsLink.href = `https://app.gmx.io/#/accounts/${userAddress}?network=arbitrum`; statsLink.style.display = ''; }
-                else statsLink.style.display = 'none';
+            if (userAddress && !isDemoMode) {
+                arbiscanLink.href = `https://arbiscan.io/address/${userAddress}`;
+                arbiscanLink.style.display = '';
+                statsLink.href = `https://app.gmx.io/#/accounts/${userAddress}?network=arbitrum`;
+                statsLink.style.display = '';
+            } else {
+                arbiscanLink.style.display = 'none';
+                statsLink.style.display = 'none';
             }
+            renderWalletAssetsList();
         }
 
         function closeWalletSidebar() { document.getElementById('walletSidebar').classList.remove('open'); }
