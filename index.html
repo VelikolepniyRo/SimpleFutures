@@ -1104,18 +1104,12 @@
                     Object.entries(bySymbol).forEach(([symbol, m]) => {
                         GMX_MARKETS[symbol] = { marketAddress: ethers.utils.getAddress(m.marketToken), indexToken: ethers.utils.getAddress(m.indexToken) };
                     });
-
-                    // The sidebar coin list is driven by `cryptoPairs`, the hardcoded default list
-                    // in this file, which doesn't necessarily cover every market GMX actually
-                    // lists. Now that we know the real, live set of tradable GMX markets, fold in
-                    // any symbol that's missing so nothing GMX supports is hidden from the list,
-                    // then re-render so it actually shows up (renderCoinList() already ran once
-                    // before this async call finished).
-                    let addedNewSymbol = false;
-                    Object.keys(GMX_MARKETS).forEach(symbol => {
-                        if (!cryptoPairs.includes(symbol)) { cryptoPairs.push(symbol); addedNewSymbol = true; }
-                    });
-                    if (addedNewSymbol && terminalInitialized) renderCoinList();
+                    // NOTE: the sidebar coin list is driven entirely by the hardcoded `cryptoPairs`
+                    // array above — we deliberately do NOT auto-add every symbol GMX happens to
+                    // list here. GMX's live market list includes a lot of thin/exotic tickers with
+                    // no reliable Bybit price feed, so auto-adding them was surfacing coins with no
+                    // price/chart on the site. To add or remove a coin from the sidebar, edit the
+                    // `cryptoPairs` array directly.
 
                     gmxMarketsLoaded = true;
                     setGmxMarketsStatus('ok');
