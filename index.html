@@ -318,8 +318,8 @@
         <div class="fs-checkmark-circle">
             <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#0c0d10" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
         </div>
-        <h2 style="color: #eaecef; margin-bottom: 6px; font-size: 20px;">Спасибо за отзыв!</h2>
-        <p style="color: #848e9c; font-size: 13px;">Вернём вас на главный экран через <span id="fsCountdown">3</span>...</p>
+        <h2 style="color: #eaecef; margin-bottom: 6px; font-size: 20px;" data-i18n="feedbackThanks">Спасибо за отзыв!</h2>
+        <p style="color: #848e9c; font-size: 13px;" data-i18n-html="feedbackRedirect">Вернём вас на главный экран через <span id="fsCountdown">3</span>...</p>
     </div>
 
     <div id="app-landing">
@@ -408,15 +408,23 @@
                 </div>
                 <span class="logo-text">SimpleFutures</span>
             </div>
-            <button class="btn-outline" onclick="openLanding()">Вернуться на главную</button>
+            <div class="header-btns">
+                <div class="lang-switch" onclick="toggleLanguage()" role="button" aria-label="EN / RU">
+                    <span class="lang-switch-thumb"></span>
+                    <span class="lang-switch-opt lang-switch-opt-en">EN</span>
+                    <span class="lang-switch-opt lang-switch-opt-ru">RU</span>
+                </div>
+                <button class="btn-outline" onclick="openLanding()" data-i18n="authBackHome">На главную</button>
+                <button class="wallet-btn" onclick="openAuth()" data-i18n="enterTerminalBtn">Вход в terminal</button>
+            </div>
         </div>
         <div class="feedback-container">
-            <h2 class="feedback-title">Оставить отзыв</h2>
-            <p class="feedback-desc">Ваше мнение помогает нам улучшать торговый терминал</p>
+            <h2 class="feedback-title" data-i18n="feedbackTitle">Оставить отзыв</h2>
+            <p class="feedback-desc" data-i18n="feedbackDesc">Ваше мнение помогает нам улучшать торговый терминал</p>
             <form onsubmit="handleFeedbackSubmit(event)">
-                <div class="form-group"><label>Ваш Email</label><input type="email" id="feedbackEmail" placeholder="example@domain.com" required></div>
-                <div class="form-group"><label>Сообщение</label><textarea id="feedbackMessage" placeholder="Опишите ваши впечатления или предложения..." required></textarea></div>
-                <button type="submit" class="cta-btn" style="width: 100%; margin-top: 8px;" id="feedbackSubmitBtn">Отправить</button>
+                <div class="form-group"><label data-i18n="feedbackEmailLabel">Ваш Email</label><input type="email" id="feedbackEmail" placeholder="example@domain.com" required></div>
+                <div class="form-group"><label data-i18n="feedbackMessageLabel">Сообщение</label><textarea id="feedbackMessage" data-i18n-placeholder="feedbackMessagePlaceholder" placeholder="Опишите ваши впечатления или предложения..." required></textarea></div>
+                <button type="submit" class="cta-btn" style="width: 100%; margin-top: 8px;" id="feedbackSubmitBtn" data-i18n="feedbackSubmitBtn">Отправить</button>
             </form>
         </div>
     </div>
@@ -938,6 +946,10 @@
                 faqQ4: '4. Есть ли демо-режим?', faqA4: 'Да. В демо-режиме доступен тот же интерфейс без подключения кошелька — со стартовым виртуальным балансом $10,000. Ничего не отправляется в блокчейн, поэтому можно свободно потренироваться перед реальной торговлей.',
                 faqQ5: '5. Какая комиссия за сделки?', faqA5: 'Комиссии (открытие/закрытие позиции, funding и borrowing) устанавливает сам протокол GMX и зависят от текущего рынка — мы их не меняем и не берём дополнительную комиссию сверху.',
                 faqQ6: '6. Как работают Take Profit / Stop Loss?', faqA6: 'Вы задаёте цену TP и/или SL для открытой позиции кнопкой TP/SL в таблице позиций. Ордер размещается напрямую в сети и исполняется GMX Keeper\'ом автоматически при достижении заданной цены.',
+                feedbackTitle: 'Оставить отзыв', feedbackDesc: 'Ваше мнение помогает нам улучшать торговый терминал',
+                feedbackEmailLabel: 'Ваш Email', feedbackMessageLabel: 'Сообщение', feedbackMessagePlaceholder: 'Опишите ваши впечатления или предложения...',
+                feedbackSubmitBtn: 'Отправить', feedbackSubmitting: 'Отправка...',
+                feedbackThanks: 'Спасибо за отзыв!', feedbackRedirect: 'Вернём вас на главный экран через <span id="fsCountdown">3</span>...',
                 navFaq: 'FAQ', navSupport: 'Поддержка', navCom: 'Com ▾',
                 tickerChange24h: 'Изменение 24ч', tickerHigh24h: 'Макс 24ч', tickerLow24h: 'Мин 24ч', tickerVol24h: 'Объем 24ч (USDT)',
                 available: 'Доступно:', marketTab: 'Рыночный', limitTab: 'Лимитный',
@@ -969,6 +981,10 @@
                 faqQ4: '4. Is there a demo mode?', faqA4: 'Yes. Demo mode gives you the same interface without connecting a wallet — with a starting virtual balance of $10,000. Nothing is sent to the blockchain, so it\'s a safe way to practice before trading for real.',
                 faqQ5: '5. What are the trading fees?', faqA5: 'Fees (opening/closing a position, funding, and borrowing) are set by the GMX protocol itself and depend on current market conditions — we don\'t change them or add anything on top.',
                 faqQ6: '6. How do Take Profit / Stop Loss work?', faqA6: 'You set a TP and/or SL price for an open position using the TP/SL button in the positions table. The order is placed directly on-chain and is executed automatically by a GMX Keeper once the target price is reached.',
+                feedbackTitle: 'Leave feedback', feedbackDesc: 'Your feedback helps us improve the trading terminal',
+                feedbackEmailLabel: 'Your Email', feedbackMessageLabel: 'Message', feedbackMessagePlaceholder: 'Describe your experience or suggestions...',
+                feedbackSubmitBtn: 'Send', feedbackSubmitting: 'Sending...',
+                feedbackThanks: 'Thanks for your feedback!', feedbackRedirect: 'Taking you back to the home screen in <span id="fsCountdown">3</span>...',
                 navFaq: 'FAQ', navSupport: 'Support', navCom: 'Com ▾',
                 tickerChange24h: '24h Change', tickerHigh24h: '24h High', tickerLow24h: '24h Low', tickerVol24h: '24h Volume (USDT)',
                 available: 'Available:', marketTab: 'Market', limitTab: 'Limit',
@@ -1296,7 +1312,7 @@
             }
             if (!emailjsInitialized) { emailjs.init(EMAILJS_PUBLIC_KEY); emailjsInitialized = true; }
 
-            btn.disabled = true; btn.innerText = 'Отправка...';
+            btn.disabled = true; btn.innerText = t('feedbackSubmitting');
             try {
                 await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, { from_email: email, message: message });
                 event.target.reset();
@@ -1305,7 +1321,7 @@
                 console.error('[EmailJS] Не удалось отправить отзыв:', err);
                 showErrorToast('Не удалось отправить отзыв.');
             } finally {
-                btn.disabled = false; btn.innerText = 'Отправить';
+                btn.disabled = false; btn.innerText = t('feedbackSubmitBtn');
             }
         }
 
