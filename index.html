@@ -489,10 +489,10 @@
                         <span class="dropdown-balance-crypto" id="dropdownCrypto">0.0000 ETH</span>
                     </div>
                     <div class="dropdown-menu">
-                        <div class="dropdown-item" id="openWalletBtn" onclick="openWalletSidebar()">Кошелек <span style="color: #848e9c; font-size: 11px;">Управление</span></div>
-                        <div class="dropdown-item" id="openPnlBtn" onclick="openPnlPage()">PnL <span style="color: #848e9c; font-size: 11px;">Статистика</span></div>
-                        <div class="dropdown-item" id="resetDemoBtn" style="display:none; color: #FFC700;" onclick="resetDemoState()">Сбросить демо-счёт <span>↺</span></div>
-                        <div class="dropdown-item" style="color: #f84960;" onclick="disconnectWallet()">Отключить кошелек <span>⍈</span></div>
+                        <div class="dropdown-item" id="openWalletBtn" onclick="openWalletSidebar()"><span data-i18n="dropdownWallet">Кошелек</span> <span style="color: #848e9c; font-size: 11px;" data-i18n="dropdownManage">Управление</span></div>
+                        <div class="dropdown-item" id="openPnlBtn" onclick="openPnlPage()">PnL <span style="color: #848e9c; font-size: 11px;" data-i18n="dropdownStats">Статистика</span></div>
+                        <div class="dropdown-item" id="resetDemoBtn" style="display:none; color: #FFC700;" onclick="resetDemoState()"><span data-i18n="dropdownResetDemo">Сбросить демо-счёт</span> <span>↺</span></div>
+                        <div class="dropdown-item" style="color: #f84960;" onclick="disconnectWallet()"><span data-i18n="dropdownDisconnect">Отключить кошелек</span> <span>⍈</span></div>
                     </div>
                 </div>
             </div>
@@ -973,6 +973,9 @@
                 statsCurveLabel: 'Кривая накопленного PnL по закрытым сделкам', statsOpenPositionsNow: 'Открытые позиции сейчас', statsEmptyOpen: 'Нет открытых позиций.',
                 cardEntryPrice: 'Цена входа', cardMarkPrice: 'Цена маркировки', cardLeverage: 'Плечо',
                 cardDownloadPng: 'Скачать PNG', cardClose: 'Закрыть', cardTotalPnl: 'Итоговый PnL', cardVolume: 'Объём', cardTrades: 'Сделок', cardOpenNow: 'Открыто сейчас',
+                statsCurveEmpty: 'Пока нет закрытых сделок для графика.',
+                dropdownWallet: 'Кошелек', dropdownManage: 'Управление', dropdownStats: 'Статистика',
+                dropdownResetDemo: 'Сбросить демо-счёт', dropdownDisconnect: 'Отключить кошелек',
                 navFaq: 'FAQ', navSupport: 'Поддержка', navCom: 'Com ▾',
                 tickerChange24h: 'Изменение 24ч', tickerHigh24h: 'Макс 24ч', tickerLow24h: 'Мин 24ч', tickerVol24h: 'Объем 24ч (USDT)',
                 available: 'Доступно:', marketTab: 'Рыночный', limitTab: 'Лимитный',
@@ -1019,6 +1022,9 @@
                 statsCurveLabel: 'Cumulative PnL curve for closed trades', statsOpenPositionsNow: 'Open positions right now', statsEmptyOpen: 'No open positions.',
                 cardEntryPrice: 'Entry price', cardMarkPrice: 'Mark price', cardLeverage: 'Leverage',
                 cardDownloadPng: 'Download PNG', cardClose: 'Close', cardTotalPnl: 'Total PnL', cardVolume: 'Volume', cardTrades: 'Trades', cardOpenNow: 'Open now',
+                statsCurveEmpty: 'No closed trades yet for the chart.',
+                dropdownWallet: 'Wallet', dropdownManage: 'Manage', dropdownStats: 'Statistics',
+                dropdownResetDemo: 'Reset demo account', dropdownDisconnect: 'Disconnect wallet',
                 navFaq: 'FAQ', navSupport: 'Support', navCom: 'Com ▾',
                 tickerChange24h: '24h Change', tickerHigh24h: '24h High', tickerLow24h: '24h Low', tickerVol24h: '24h Volume (USDT)',
                 available: 'Available:', marketTab: 'Market', limitTab: 'Limit',
@@ -1477,7 +1483,7 @@
         function renderPnlCurve(closedTrades) {
             const box = document.getElementById('pnlCurveBox');
             if (!closedTrades.length) {
-                box.innerHTML = '<div style="display:flex; align-items:center; justify-content:center; height:100%; color:#5b6472; font-size:12px;">Пока нет закрытых сделок для графика.</div>';
+                box.innerHTML = `<div style="display:flex; align-items:center; justify-content:center; height:100%; color:#5b6472; font-size:12px;">${t('statsCurveEmpty')}</div>`;
                 return;
             }
             const sorted = [...closedTrades].sort((a, b) => a.timestamp - b.timestamp);
