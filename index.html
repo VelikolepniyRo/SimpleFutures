@@ -319,7 +319,7 @@
             <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#0c0d10" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
         </div>
         <h2 style="color: #eaecef; margin-bottom: 6px; font-size: 20px;" data-i18n="feedbackThanks">Спасибо за отзыв!</h2>
-        <p style="color: #848e9c; font-size: 13px;" data-i18n-html="feedbackRedirect">Вернём вас на главный экран через <span id="fsCountdown">3</span>...</p>
+        <p style="color: #848e9c; font-size: 13px;" data-i18n-html="feedbackRedirect">Возвращаем вас обратно через <span id="fsCountdown">3</span>...</p>
     </div>
 
     <div id="app-landing">
@@ -442,7 +442,7 @@
                 <div class="header-nav">
                     <a class="header-nav-link active" id="navTrade" onclick="switchTerminalTab('trade')">Trade</a>
                     <a class="header-nav-link" id="navFaq" onclick="switchTerminalTab('faq')" data-i18n="navFaq">FAQ</a>
-                    <a class="header-nav-link" id="navSupport" onclick="openFeedback()" data-i18n="navSupport">Поддержка</a>
+                    <a class="header-nav-link" id="navSupport" onclick="switchTerminalTab('support')" data-i18n="navSupport">Поддержка</a>
                     
                     <div class="com-dropdown-container">
                         <a class="header-nav-link" id="navCom" onclick="toggleComDropdown()" data-i18n="navCom">Com ▾</a>
@@ -721,6 +721,18 @@
             </div>
         </div>
 
+        <div id="terminal-support-view" style="display: none; padding: 40px 20px; overflow-y: auto; flex: 1; background-color: #0c0d10;">
+            <div class="feedback-container" style="margin: 0 auto;">
+                <h2 class="feedback-title" data-i18n="feedbackTitle">Оставить отзыв</h2>
+                <p class="feedback-desc" data-i18n="feedbackDesc">Ваше мнение помогает нам улучшать торговый терминал</p>
+                <form onsubmit="handleSupportSubmit(event)">
+                    <div class="form-group"><label data-i18n="feedbackEmailLabel">Ваш Email</label><input type="email" id="supportEmail" placeholder="example@domain.com" required></div>
+                    <div class="form-group"><label data-i18n="feedbackMessageLabel">Сообщение</label><textarea id="supportMessage" data-i18n-placeholder="feedbackMessagePlaceholder" placeholder="Опишите ваши впечатления или предложения..." required></textarea></div>
+                    <button type="submit" class="cta-btn" style="width: 100%; margin-top: 8px;" id="supportSubmitBtn" data-i18n="feedbackSubmitBtn">Отправить</button>
+                </form>
+            </div>
+        </div>
+
         <div id="terminal-pnl-view" style="display: none; padding: 40px 20px; overflow-y: auto; flex: 1; background-color: #0c0d10;">
             <div class="faq-wrapper">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
@@ -949,7 +961,7 @@
                 feedbackTitle: 'Оставить отзыв', feedbackDesc: 'Ваше мнение помогает нам улучшать торговый терминал',
                 feedbackEmailLabel: 'Ваш Email', feedbackMessageLabel: 'Сообщение', feedbackMessagePlaceholder: 'Опишите ваши впечатления или предложения...',
                 feedbackSubmitBtn: 'Отправить', feedbackSubmitting: 'Отправка...',
-                feedbackThanks: 'Спасибо за отзыв!', feedbackRedirect: 'Вернём вас на главный экран через <span id="fsCountdown">3</span>...',
+                feedbackThanks: 'Спасибо за отзыв!', feedbackRedirect: 'Возвращаем вас обратно через <span id="fsCountdown">3</span>...',
                 navFaq: 'FAQ', navSupport: 'Поддержка', navCom: 'Com ▾',
                 tickerChange24h: 'Изменение 24ч', tickerHigh24h: 'Макс 24ч', tickerLow24h: 'Мин 24ч', tickerVol24h: 'Объем 24ч (USDT)',
                 available: 'Доступно:', marketTab: 'Рыночный', limitTab: 'Лимитный',
@@ -984,7 +996,7 @@
                 feedbackTitle: 'Leave feedback', feedbackDesc: 'Your feedback helps us improve the trading terminal',
                 feedbackEmailLabel: 'Your Email', feedbackMessageLabel: 'Message', feedbackMessagePlaceholder: 'Describe your experience or suggestions...',
                 feedbackSubmitBtn: 'Send', feedbackSubmitting: 'Sending...',
-                feedbackThanks: 'Thanks for your feedback!', feedbackRedirect: 'Taking you back to the home screen in <span id="fsCountdown">3</span>...',
+                feedbackThanks: 'Thanks for your feedback!', feedbackRedirect: 'Taking you back in <span id="fsCountdown">3</span>...',
                 navFaq: 'FAQ', navSupport: 'Support', navCom: 'Com ▾',
                 tickerChange24h: '24h Change', tickerHigh24h: '24h High', tickerLow24h: '24h Low', tickerVol24h: '24h Volume (USDT)',
                 available: 'Available:', marketTab: 'Market', limitTab: 'Limit',
@@ -1334,13 +1346,34 @@
         function switchTerminalTab(tab) {
             document.getElementById('navTrade').classList.remove('active');
             document.getElementById('navFaq').classList.remove('active');
+            document.getElementById('navSupport').classList.remove('active');
 
             document.getElementById('terminal-trade-view').style.display = 'none';
             document.getElementById('terminal-faq-view').style.display = 'none';
+            document.getElementById('terminal-support-view').style.display = 'none';
             document.getElementById('terminal-pnl-view').style.display = 'none';
 
             if (tab === 'trade') { document.getElementById('navTrade').classList.add('active'); document.getElementById('terminal-trade-view').style.display = 'flex'; }
             else if (tab === 'faq') { document.getElementById('navFaq').classList.add('active'); document.getElementById('terminal-faq-view').style.display = 'flex'; }
+            else if (tab === 'support') { document.getElementById('navSupport').classList.add('active'); document.getElementById('terminal-support-view').style.display = 'flex'; }
+        }
+
+        async function handleSupportSubmit(event) {
+            event.preventDefault();
+            const btn = document.getElementById('supportSubmitBtn');
+            const email = document.getElementById('supportEmail').value;
+            const message = document.getElementById('supportMessage').value;
+            btn.disabled = true; btn.innerText = t('feedbackSubmitting');
+            try {
+                await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, { from_email: email, message: message });
+                event.target.reset();
+                showFeedbackSuccess();
+            } catch (err) {
+                console.error('[EmailJS] Не удалось отправить отзыв:', err);
+                showErrorToast('Не удалось отправить отзыв.');
+            } finally {
+                btn.disabled = false; btn.innerText = t('feedbackSubmitBtn');
+            }
         }
 
         function openPnlPage() {
@@ -1349,8 +1382,10 @@
             openTerminal();
             document.getElementById('navTrade').classList.remove('active');
             document.getElementById('navFaq').classList.remove('active');
+            document.getElementById('navSupport').classList.remove('active');
             document.getElementById('terminal-trade-view').style.display = 'none';
             document.getElementById('terminal-faq-view').style.display = 'none';
+            document.getElementById('terminal-support-view').style.display = 'none';
             document.getElementById('terminal-pnl-view').style.display = 'flex';
             renderPnlPage();
         }
@@ -1532,8 +1567,16 @@
         function showFeedbackSuccess() {
             const overlay = document.getElementById('feedbackSuccessOverlay');
             const countdownEl = document.getElementById('fsCountdown');
+            const cameFromTerminal = document.getElementById('app-terminal').style.display === 'flex';
             let seconds = 3; countdownEl.innerText = seconds; overlay.classList.add('show');
-            const timer = setInterval(() => { seconds -= 1; countdownEl.innerText = seconds; if (seconds <= 0) { clearInterval(timer); overlay.classList.remove('show'); openLanding(); } }, 1000);
+            const timer = setInterval(() => {
+                seconds -= 1; countdownEl.innerText = seconds;
+                if (seconds <= 0) {
+                    clearInterval(timer);
+                    overlay.classList.remove('show');
+                    if (cameFromTerminal) switchTerminalTab('trade'); else openLanding();
+                }
+            }, 1000);
         }
 
         let statusBoxHideTimer = null;
