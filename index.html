@@ -2660,10 +2660,11 @@
                 // however low the leverage).
                 let liqPriceRaw = apiKey ? apiLiqPrices[apiKey] : null;
                 if (liqPriceRaw > 0) {
-                    let guard = 0;
-                    while (liqPriceRaw > markPrice * 20 && guard < 20) { liqPriceRaw /= 10; guard++; }
-                    guard = 0;
-                    while (liqPriceRaw < markPrice / 20 && guard < 20) { liqPriceRaw *= 10; guard++; }
+                    // Pick the power-of-ten correction that lands closest to the mark price,
+                    // rather than just "close enough" — e.g. raw=4474873631, mark=71.67 needs
+                    // dividing by exactly 10^8 (≈44.75), not just any amount under some threshold.
+                    const exponent = Math.round(Math.log10(liqPriceRaw / markPrice));
+                    liqPriceRaw = liqPriceRaw / Math.pow(10, exponent);
                 } else {
                     // GMX liquidates once remaining collateral (margin ± pnl) would fall to
                     // minCollateralFactor * positionSize — not at a flat 1/leverage move. This
