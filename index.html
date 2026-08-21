@@ -547,41 +547,41 @@
                                 </thead>
                                 <tbody id="positionsTbody"></tbody>
                             </table>
-                            <div class="empty-state active" id="emptyPositionsBox">У вас пока нет открытых позиций</div>
+                            <div class="empty-state active" id="emptyPositionsBox" data-i18n="emptyPositions">У вас пока нет открытых позиций</div>
 
                             <table class="table-view" id="ordersTable">
                                 <thead>
                                     <tr>
-                                        <th>Время</th>
-                                        <th>Символ</th>
-                                        <th>Тип</th>
-                                        <th>Сторона</th>
-                                        <th>Цена</th>
-                                        <th>Количество</th>
-                                        <th>Заполнено</th>
-                                        <th>Действие</th>
+                                        <th data-i18n="thTime">Время</th>
+                                        <th data-i18n="thSymbol">Символ</th>
+                                        <th data-i18n="thType">Тип</th>
+                                        <th data-i18n="thSide">Сторона</th>
+                                        <th data-i18n="thPrice">Цена</th>
+                                        <th data-i18n="thAmount">Количество</th>
+                                        <th data-i18n="thFilled">Заполнено</th>
+                                        <th data-i18n="thAction">Действие</th>
                                     </tr>
                                 </thead>
                                 <tbody id="ordersTbody"></tbody>
                             </table>
-                            <div class="empty-state" id="emptyOrdersBox">Нет открытых ордеров</div>
+                            <div class="empty-state" id="emptyOrdersBox" data-i18n="emptyOrders">Нет открытых ордеров</div>
 
                             <table class="table-view" id="historyTable">
                                 <thead>
                                     <tr>
-                                        <th>Время</th>
-                                        <th>Символ</th>
-                                        <th>Тип</th>
-                                        <th>Сторона</th>
-                                        <th>Цена</th>
-                                        <th>Количество</th>
-                                        <th>Статус</th>
+                                        <th data-i18n="thTime">Время</th>
+                                        <th data-i18n="thSymbol">Символ</th>
+                                        <th data-i18n="thType">Тип</th>
+                                        <th data-i18n="thSide">Сторона</th>
+                                        <th data-i18n="thPrice">Цена</th>
+                                        <th data-i18n="thAmount">Количество</th>
+                                        <th data-i18n="thStatus">Статус</th>
                                     </tr>
                                 </thead>
                                 <tbody id="historyTbody"></tbody>
                             </table>
                             <div class="empty-state" id="emptyHistoryBox">
-                                <span id="emptyHistoryText">История пуста</span>
+                                <span id="emptyHistoryText" data-i18n="emptyHistory">История пуста</span>
                             </div>
                         </div>
                     </div>
@@ -889,15 +889,15 @@
 
     <div id="tpSlModalOverlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:9999; align-items:center; justify-content:center;" onclick="if(event.target===this) closeTpSlModal()">
         <div style="background:#161a1e; border-radius:8px; padding:20px; width:300px; border:1px solid #1e2026;">
-            <h3 style="margin-bottom:4px; color:#eaecef; font-size:15px;">Изменить TP/SL</h3>
+            <h3 style="margin-bottom:4px; color:#eaecef; font-size:15px;" data-i18n="tpSlModalTitle">Изменить TP/SL</h3>
             <p id="tpSlModalSymbol" style="margin-bottom:12px; color:#848e9c; font-size:12px;">BTC/USDT</p>
-            <div class="form-group"><label>Тейк-профит</label><input type="number" id="tpSlNewTP" placeholder="Цена USDT" oninput="updateTpSlModalEstimates()"></div>
+            <div class="form-group"><label data-i18n="tpSlTakeProfitLabel">Тейк-профит</label><input type="number" id="tpSlNewTP" data-i18n-placeholder="tpSlPricePlaceholder" placeholder="Цена USDT" oninput="updateTpSlModalEstimates()"></div>
             <div id="tpSlModalTpEst" style="font-size:11px; color:#5b6472; margin:-8px 0 8px; line-height:1.4;"></div>
-            <div class="form-group"><label>Стоп-лосс</label><input type="number" id="tpSlNewSL" placeholder="Цена USDT" oninput="updateTpSlModalEstimates()"></div>
+            <div class="form-group"><label data-i18n="tpSlStopLossLabel">Стоп-лосс</label><input type="number" id="tpSlNewSL" data-i18n-placeholder="tpSlPricePlaceholder" placeholder="Цена USDT" oninput="updateTpSlModalEstimates()"></div>
             <div id="tpSlModalSlEst" style="font-size:11px; color:#5b6472; margin:-8px 0 8px; line-height:1.4;"></div>
             <div style="display:flex; gap:8px; margin-top:12px;">
-                <button class="trade-btn btn-long" id="tpSlSaveBtn" style="flex:1; padding:8px;" onclick="submitTpSlUpdateGuarded()">Сохранить</button>
-                <button class="btn-outline" style="flex:1; padding:8px;" onclick="closeTpSlModal()">Отмена</button>
+                <button class="trade-btn btn-long" id="tpSlSaveBtn" style="flex:1; padding:8px;" onclick="submitTpSlUpdateGuarded()" data-i18n="tpSlSaveBtn">Сохранить</button>
+                <button class="btn-outline" style="flex:1; padding:8px;" onclick="closeTpSlModal()" data-i18n="tpSlCancelBtn">Отмена</button>
             </div>
         </div>
     </div>
@@ -956,6 +956,14 @@
                 walletGmxStatsHint: 'Объём торгов и PnL по этому кошельку — на официальной странице GMX (открывает в новой вкладке), пока мы не подключили собственное чтение через Reader-контракт.',
                 walletDisclaimer: 'Некастодиальное подключение: приложение никогда не имеет доступа к вашим приватным ключам, все транзакции подписываются в вашем кошельке (MetaMask / Trust Wallet).',
                 walletAssetsTitle: 'Активы кошелька', walletAssetsEmpty: 'На этом кошельке пока нет активов.',
+                tpSlModalTitle: 'Изменить TP/SL', tpSlTakeProfitLabel: 'Тейк-профит', tpSlStopLossLabel: 'Стоп-лосс',
+                tpSlPricePlaceholder: 'Цена USDT', tpSlSaveBtn: 'Сохранить', tpSlCancelBtn: 'Отмена', tpSlEstResult: 'Прибл. результат',
+                emptyPositions: 'У вас пока нет открытых позиций', emptyOrders: 'Нет открытых ордеров', emptyHistory: 'История пуста',
+                thTime: 'Время', thSymbol: 'Символ', thType: 'Тип', thSide: 'Сторона', thPrice: 'Цена', thAmount: 'Количество', thFilled: 'Заполнено', thStatus: 'Статус',
+                orderTypeLimit: 'Лимитный', orderTypeMarket: 'Рыночный', cancelBtn: 'Отменить',
+                historyStatusClosed: 'Закрыта', historyStatusLiquidated: 'Ликвидация',
+                historyLoadFailed: 'История закрытых сделок пока не удалось загрузить для реального кошелька (индексатор GMX недоступен или изменил формат ответа).',
+                historyLoadFailedLinkPrefix: 'Полную историю можно посмотреть на',
                 navFaq: 'FAQ', navSupport: 'Поддержка', navCom: 'Com ▾',
                 tickerChange24h: 'Изменение 24ч', tickerHigh24h: 'Макс 24ч', tickerLow24h: 'Мин 24ч', tickerVol24h: 'Объем 24ч (USDT)',
                 available: 'Доступно:', marketTab: 'Рыночный', limitTab: 'Лимитный',
@@ -1009,6 +1017,14 @@
                 walletGmxStatsHint: 'Trading volume and PnL for this wallet — on the official GMX page (opens in a new tab), until we hook up our own reads via the Reader contract.',
                 walletDisclaimer: 'Non-custodial connection: the app never has access to your private keys, all transactions are signed in your own wallet (MetaMask / Trust Wallet).',
                 walletAssetsTitle: 'Wallet assets', walletAssetsEmpty: 'This wallet has no assets yet.',
+                tpSlModalTitle: 'Edit TP/SL', tpSlTakeProfitLabel: 'Take Profit', tpSlStopLossLabel: 'Stop Loss',
+                tpSlPricePlaceholder: 'Price USDT', tpSlSaveBtn: 'Save', tpSlCancelBtn: 'Cancel', tpSlEstResult: 'Est. result',
+                emptyPositions: 'You have no open positions yet', emptyOrders: 'No open orders', emptyHistory: 'History is empty',
+                thTime: 'Time', thSymbol: 'Symbol', thType: 'Type', thSide: 'Side', thPrice: 'Price', thAmount: 'Amount', thFilled: 'Filled', thStatus: 'Status',
+                orderTypeLimit: 'Limit', orderTypeMarket: 'Market', cancelBtn: 'Cancel',
+                historyStatusClosed: 'Closed', historyStatusLiquidated: 'Liquidated',
+                historyLoadFailed: "Couldn't load closed-trade history for this real wallet yet (the GMX indexer is unavailable or changed its response format).",
+                historyLoadFailedLinkPrefix: 'You can see the full history on',
                 navFaq: 'FAQ', navSupport: 'Support', navCom: 'Com ▾',
                 tickerChange24h: '24h Change', tickerHigh24h: '24h High', tickerLow24h: '24h Low', tickerVol24h: '24h Volume (USDT)',
                 available: 'Available:', marketTab: 'Market', limitTab: 'Limit',
@@ -1992,11 +2008,18 @@
         // TP/SL order type, then every OrderExecuted/OrderCancelled, and an order counts as active
         // only if its orderKey never shows up in the second set.
         async function fetchActiveTriggerOrders(account) {
+            // account_containsInsensitive instead of account_eq: the query was returning a clean
+            // 200 OK with an EMPTY result (not a GraphQL error), which pointed at a silent
+            // mismatch rather than a broken query. account_eq does an exact-case string compare,
+            // and this indexer may store addresses checksummed (mixed-case) while we were sending
+            // an all-lowercase address — so nothing ever matched. A full 42-char address can't be
+            // a substring of another, so "contains, case-insensitive" behaves as an exact match
+            // here regardless of which case convention the indexer actually uses internally.
             const query = `
                 query($account: String!) {
                     tradeActions(
                         where: {
-                            account_eq: $account
+                            account_containsInsensitive: $account
                             orderType_in: [${ORDER_TYPE_LIMIT_DECREASE}, ${ORDER_TYPE_STOP_LOSS_DECREASE}]
                             eventName_in: ["OrderCreated", "OrderExecuted", "OrderCancelled"]
                         }
@@ -2010,7 +2033,7 @@
                 const res = await fetch(GMX_SUBSQUID_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ query, variables: { account: account.toLowerCase() } })
+                    body: JSON.stringify({ query, variables: { account: account } })
                 });
                 let json = null;
                 try { json = await res.json(); } catch (parseErr) { /* not JSON */ }
@@ -2376,7 +2399,13 @@
                         id: idx, asset: symbol, isLong,
                         leverage: leverage || 1, entryPrice, margin,
                         takeProfit: knownTpSl.tp || 0, stopLoss: knownTpSl.sl || 0, isOpen: true,
-                        openedAt: pos.numbers.increasedAtTime ? parseInt(pos.numbers.increasedAtTime.toString()) * 1000 : null,
+                        // NOTE: GMX's increasedAtTime isn't a reliable "position opened at" —
+                        // it can be touched by internal fee/funding settlement, not just a
+                        // literal size increase, so it kept showing "just opened" for positions
+                        // that had actually been open for a while. Not surfacing it for real
+                        // positions until there's a trustworthy source for the true open time
+                        // (demo positions still show it — that timestamp is authoritative there).
+                        openedAt: null,
                         // raw on-chain values, needed to build a correct close/TP/SL order later —
                         // not used by the table renderer, just carried along.
                         _raw: { marketAddress: pos.addresses.market, collateralToken: pos.addresses.collateralToken,
@@ -2503,12 +2532,12 @@
                 <tr>
                     <td>${new Date(o.createdAt).toLocaleTimeString('ru-RU')}</td>
                     <td>${o.asset}/USDT</td>
-                    <td>Лимитный</td>
+                    <td>${t('orderTypeLimit')}</td>
                     <td>${o.isLong ? '<span style="color:#00c087;">Long</span>' : '<span style="color:#f84960;">Short</span>'}</td>
                     <td class="font-mono">${o.limitPrice}</td>
                     <td class="font-mono">${(o.marginUsd * o.leverage).toFixed(2)} USDT</td>
                     <td>0%</td>
-                    <td><button class="btn-outline" style="padding:4px 10px; font-size:11px;" onclick="cancelDemoOrder(${o.id})">Отменить</button></td>
+                    <td><button class="btn-outline" style="padding:4px 10px; font-size:11px;" onclick="cancelDemoOrder(${o.id})">${t('cancelBtn')}</button></td>
                 </tr>`).join('');
             if (isActiveTab) {
                 if (demoOrders.length) { table.classList.add('active'); emptyBox.classList.remove('active'); }
@@ -2569,16 +2598,16 @@
             if (!userAddress) return;
             const emptyText = document.getElementById('emptyHistoryText');
             if (isDemoMode) {
-                if (emptyText) emptyText.innerText = 'История пуста';
+                if (emptyText) emptyText.innerText = t('emptyHistory');
                 return renderHistory(demoHistory);
             }
             const real = await getRealHistoryCached();
             if (real !== null) {
-                if (emptyText) emptyText.innerText = 'История пуста';
+                if (emptyText) emptyText.innerText = t('emptyHistory');
                 return renderHistory(real);
             }
             if (emptyText) {
-                emptyText.innerHTML = `История закрытых сделок пока не удалось загрузить для реального кошелька (индексатор GMX недоступен или изменил формат ответа).<br>Полную историю можно посмотреть на <a href="https://app.gmx.io/#/accounts/${userAddress}?network=arbitrum" target="_blank" style="color:#FFC700;">app.gmx.io</a>.`;
+                emptyText.innerHTML = `${t('historyLoadFailed')}<br>${t('historyLoadFailedLinkPrefix')} <a href="https://app.gmx.io/#/accounts/${userAddress}?network=arbitrum" target="_blank" style="color:#FFC700;">app.gmx.io</a>.`;
             }
             renderHistory([]);
         }
@@ -2603,12 +2632,12 @@
                 const timeStr = p.timestamp ? new Date(p.timestamp).toLocaleString('ru-RU') : '-';
                 const priceStr = (p.closePrice !== null && p.closePrice !== undefined) ? p.closePrice.toFixed(4) : '-';
                 const sizeUsd = p.sizeUsd !== undefined ? p.sizeUsd : (p.margin || 0) * (p.leverage || 0);
-                let statusStr = 'Закрыта';
+                let statusStr = t('historyStatusClosed');
                 let statusColor = '#eaecef';
-                if (p.isLiquidated) { statusStr = 'Ликвидация'; statusColor = '#f84960'; }
+                if (p.isLiquidated) { statusStr = t('historyStatusLiquidated'); statusColor = '#f84960'; }
                 else if (p.pnl !== null) { statusStr = p.pnl >= 0 ? `+${p.pnl.toFixed(2)} USDT` : `${p.pnl.toFixed(2)} USDT`; statusColor = p.pnl >= 0 ? '#00c087' : '#f84960'; }
 
-                return `<tr><td>${timeStr}</td><td>${p.asset}/USDT</td><td>Рыночный</td><td>${sideLabel}</td><td>${priceStr}</td><td>${sizeUsd.toFixed(2)} USDT</td><td style="color: ${statusColor};">${statusStr}</td></tr>`;
+                return `<tr><td>${timeStr}</td><td>${p.asset}/USDT</td><td>${t('orderTypeMarket')}</td><td>${sideLabel}</td><td>${priceStr}</td><td>${sizeUsd.toFixed(2)} USDT</td><td style="color: ${statusColor};">${statusStr}</td></tr>`;
             }).join('');
         }
 
@@ -2919,11 +2948,11 @@
 
             const tpVal = parseFloat(document.getElementById('tpSlNewTP').value);
             const tpPnl = tpVal > 0 ? pnlAtTarget(tpVal) : null;
-            tpBox.innerHTML = tpPnl !== null ? `Прибл. результат: ${formatEstPnl(tpPnl)}` : '';
+            tpBox.innerHTML = tpPnl !== null ? `${t('tpSlEstResult')}: ${formatEstPnl(tpPnl)}` : '';
 
             const slVal = parseFloat(document.getElementById('tpSlNewSL').value);
             const slPnl = slVal > 0 ? pnlAtTarget(slVal) : null;
-            slBox.innerHTML = slPnl !== null ? `Прибл. результат: ${formatEstPnl(slPnl)}` : '';
+            slBox.innerHTML = slPnl !== null ? `${t('tpSlEstResult')}: ${formatEstPnl(slPnl)}` : '';
         }
 
         function closeTpSlModal() { document.getElementById('tpSlModalOverlay').style.display = 'none'; tpSlEditingPositionId = null; }
