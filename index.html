@@ -2648,22 +2648,34 @@
                 const priceDiff = p.isLong ? (markPrice - p.entryPrice) : (p.entryPrice - markPrice);
                 const pnl = positionSize * priceDiff / p.entryPrice;
                 const roe = p.margin > 0 ? (pnl / p.margin) * 100 : 0;
-                // GMX liquidates once remaining collateral (margin ± pnl) would fall to
-                // minCollateralFactor * positionSize — not at a flat 1/leverage move. This
-                // still ignores pending borrowing/funding fees and price impact, so it's a
-                // close estimate rather than the exact keeper-enforced value.
-                const mcf = mcfByPositionId[p.id] ?? 0.005;
-                const buffer = Math.max(1 / p.leverage - mcf, 0);
                 const apiKey = p._raw && p._raw.marketAddress ? `${p._raw.marketAddress.toLowerCase()}_${p.isLong}` : null;
-                const liqPriceRaw = (apiKey && apiLiqPrices[apiKey])
-                    ? apiLiqPrices[apiKey]
-                    : (p.isLong ? p.entryPrice * (1 - buffer) : p.entryPrice * (1 + buffer));
-                // At very low leverage (e.g. 1x-2x) the liquidation price sits so far from the
-                // current price that rounding/precision quirks in GMX's fixed-point price scaling
-                // can occasionally produce a nonsensical value (e.g. billions, when the real price
-                // is double digits). Rather than show a number that's obviously wrong, treat
-                // anything more than 50x away from the mark price as "effectively unreachable" and
-                // just show a dash.
+                // GMX's /positions REST endpoint doesn't actually encode liquidationPrice using
+                // the same (30 - tokenDecimals) oracle-price convention we use for index token
+                // prices elsewhere — confirmed by comparing against GMX's own UI: for a HYPE
+                // (8-decimal token) position, that formula produced a price off by a clean 10^8
+                // rather than the real value. Since we can't be 100% sure of the encoding for
+                // every token, self-correct instead of guessing: nudge the raw value by powers of
+                // ten until it lands within a realistic range of the current mark price (a real
+                // liquidation price is never many orders of magnitude away from the mark price,
+                // however low the leverage).
+                let liqPriceRaw = apiKey ? apiLiqPrices[apiKey] : null;
+                if (liqPriceRaw > 0) {
+                    let guard = 0;
+                    while (liqPriceRaw > markPrice * 20 && guard < 20) { liqPriceRaw /= 10; guard++; }
+                    guard = 0;
+                    while (liqPriceRaw < markPrice / 20 && guard < 20) { liqPriceRaw *= 10; guard++; }
+                } else {
+                    // GMX liquidates once remaining collateral (margin ± pnl) would fall to
+                    // minCollateralFactor * positionSize — not at a flat 1/leverage move. This
+                    // still ignores pending borrowing/funding fees and price impact, so it's a
+                    // close estimate rather than the exact keeper-enforced value.
+                    const mcf = mcfByPositionId[p.id] ?? 0.005;
+                    const buffer = Math.max(1 / p.leverage - mcf, 0);
+                    liqPriceRaw = p.isLong ? p.entryPrice * (1 - buffer) : p.entryPrice * (1 + buffer);
+                }
+                // Safety net: if it's still wildly far from the mark price after correction
+                // (genuinely possible at very low leverage), show a dash rather than a number
+                // that's likely still wrong.
                 const liqPrice = (liqPriceRaw > 0 && liqPriceRaw < markPrice * 50 && liqPriceRaw > markPrice / 50) ? liqPriceRaw : 0;
                 const pnlColor = pnl >= 0 ? '#00c087' : '#f84960';
                 const sideLabel = p.isLong ? '<span style="color:#00c087">Long</span>' : '<span style="color:#f84960">Short</span>';
