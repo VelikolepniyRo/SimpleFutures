@@ -2361,9 +2361,9 @@
                     let isLong = pos.flags.isLong;
                     const apiCandidates = apiPositionsByMarket[marketAddr];
                     if (apiCandidates && apiCandidates.length === 1) {
-                        if (apiCandidates[0].isLong !== isLong) {
-                            console.error(`[GMX] Направление позиции по ${symbol} расходится между Reader-контрактом (${isLong ? 'Long' : 'Short'}) и REST API GMX (${apiCandidates[0].isLong ? 'Long' : 'Short'}) — использую значение из API как более надёжное.`);
-                        }
+                        // Silently prefer the API's isLong over the raw Reader-contract decode —
+                        // this can legitimately disagree for a brief window right after opening a
+                        // position (indexer lag), so it's not worth logging every refresh cycle.
                         isLong = apiCandidates[0].isLong;
                     } else if (apiCandidates && apiCandidates.length > 1) {
                         console.warn(`[GMX] На рынке ${symbol} несколько позиций одновременно — направление не сверено с API, беру как есть из Reader-контракта.`);
