@@ -91,7 +91,7 @@
         .google-btn:hover:not(:disabled) { border-color: #FFC700; color: #FFC700; }
         
         /* Feedback Container */
-        .feedback-container { max-width: 520px; margin: 90px auto; padding: 32px; background-color: #161a1e; border: 1px solid #1e2026; border-radius: 8px; width: 100%; }
+        .feedback-container { max-width: 520px; margin: 90px auto; padding: 32px; background-color: #161a1e; border: 1px solid #1e2026; border-radius: 8px; width: 100%; height: fit-content; align-self: flex-start; }
         .feedback-title { font-size: 22px; margin-bottom: 8px; color: #eaecef; text-align: center; font-weight: 700; }
         .feedback-desc { color: #848e9c; text-align: center; margin-bottom: 24px; font-size: 13px; }
         .form-group { margin-bottom: 16px; display: flex; flex-direction: column; gap: 6px; }
@@ -99,7 +99,7 @@
         .form-group input, .form-group textarea, .form-group select { width: 100%; background-color: #1e2226; border: 1px solid #2b2f36; color: white; padding: 10px; border-radius: 4px; font-size: 13px; outline: none; transition: 0.15s; }
         .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: #FFC700; }
         .form-group select { cursor: pointer; height: 38px; }
-        .form-group textarea { resize: vertical; min-height: 100px; }
+        .form-group textarea { resize: vertical; min-height: 100px; max-height: 240px; }
         
         /* Header Terminal Layout */
         header { height: 48px; min-height: 48px; background-color: #161a1e; border-bottom: 1px solid #1e2026; display: flex; align-items: center; padding: 0 16px; justify-content: space-between; z-index: 100; }
@@ -1326,19 +1326,32 @@
         // than once, so no harm if the form is submitted twice.
         let emailjsInitialized = false;
 
+        // We load @emailjs/browser v4 (see the <script> tag in <head>) — its init() takes an
+        // OBJECT ({ publicKey: ... }), not a bare string like the older v3 SDK. Passing a plain
+        // string here silently fails to actually set the key, so every send() then errors with
+        // "The public key is required" even though a key was technically passed in. Shared by
+        // both feedback forms (landing page + the Support tab inside the terminal) so they can't
+        // drift out of sync again.
+        function ensureEmailJsReady() {
+            if (EMAILJS_PUBLIC_KEY === "YOUR_PUBLIC_KEY") {
+                showErrorToast('EmailJS ещё не настроен — впишите свои ключи в код (EMAILJS_PUBLIC_KEY и т.д.).');
+                return false;
+            }
+            if (!window.emailjs) {
+                showErrorToast('Скрипт EmailJS ещё не загрузился, подождите секунду и попробуйте снова.');
+                return false;
+            }
+            if (!emailjsInitialized) { emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY }); emailjsInitialized = true; }
+            return true;
+        }
+
         async function handleFeedbackSubmit(event) {
             event.preventDefault();
             const btn = document.getElementById('feedbackSubmitBtn');
             const email = document.getElementById('feedbackEmail').value;
             const message = document.getElementById('feedbackMessage').value;
 
-            if (EMAILJS_PUBLIC_KEY === "YOUR_PUBLIC_KEY") {
-                return showErrorToast('EmailJS ещё не настроен — впишите свои ключи в код (EMAILJS_PUBLIC_KEY и т.д.).');
-            }
-            if (!window.emailjs) {
-                return showErrorToast('Скрипт EmailJS ещё не загрузился, подождите секунду и попробуйте снова.');
-            }
-            if (!emailjsInitialized) { emailjs.init(EMAILJS_PUBLIC_KEY); emailjsInitialized = true; }
+            if (!ensureEmailJsReady()) return;
 
             btn.disabled = true; btn.innerText = t('feedbackSubmitting');
             try {
@@ -1379,6 +1392,9 @@
             const btn = document.getElementById('supportSubmitBtn');
             const email = document.getElementById('supportEmail').value;
             const message = document.getElementById('supportMessage').value;
+
+            if (!ensureEmailJsReady()) return;
+
             btn.disabled = true; btn.innerText = t('feedbackSubmitting');
             try {
                 await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, { from_email: email, message: message });
