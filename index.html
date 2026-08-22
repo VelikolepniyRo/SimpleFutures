@@ -2008,18 +2008,17 @@
         // TP/SL order type, then every OrderExecuted/OrderCancelled, and an order counts as active
         // only if its orderKey never shows up in the second set.
         async function fetchActiveTriggerOrders(account) {
-            // account_containsInsensitive instead of account_eq: the query was returning a clean
-            // 200 OK with an EMPTY result (not a GraphQL error), which pointed at a silent
-            // mismatch rather than a broken query. account_eq does an exact-case string compare,
-            // and this indexer may store addresses checksummed (mixed-case) while we were sending
-            // an all-lowercase address — so nothing ever matched. A full 42-char address can't be
-            // a substring of another, so "contains, case-insensitive" behaves as an exact match
-            // here regardless of which case convention the indexer actually uses internally.
+            // account_eq confirmed correct against GMX's own official documented example query
+            // (docs.gmx.io/docs/api/integration-guide/ — "Read historical trade activity"):
+            //   tradeActions(where: { account_eq: $account }, limit: 50, orderBy: timestamp_DESC)
+            // A prior attempt at account_containsInsensitive was wrong — that filter suffix isn't
+            // valid for this field and caused a 400. The original account_eq syntax was fine; the
+            // earlier "successful but empty" response had a different cause.
             const query = `
                 query($account: String!) {
                     tradeActions(
                         where: {
-                            account_containsInsensitive: $account
+                            account_eq: $account
                             orderType_in: [${ORDER_TYPE_LIMIT_DECREASE}, ${ORDER_TYPE_STOP_LOSS_DECREASE}]
                             eventName_in: ["OrderCreated", "OrderExecuted", "OrderCancelled"]
                         }
@@ -2033,7 +2032,7 @@
                 const res = await fetch(GMX_SUBSQUID_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ query, variables: { account: account } })
+                    body: JSON.stringify({ query, variables: { account: account.toLowerCase() } })
                 });
                 let json = null;
                 try { json = await res.json(); } catch (parseErr) { /* not JSON */ }
