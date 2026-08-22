@@ -2014,14 +2014,15 @@
             // A prior attempt at account_containsInsensitive was wrong — that filter suffix isn't
             // valid for this field and caused a 400. The original account_eq syntax was fine; the
             // earlier "successful but empty" response had a different cause.
+            // orderType_in / eventName_in were removed from the server-side filter — those exact
+            // string/enum values were an unverified guess, and if they don't match the schema's
+            // real values, the filter just silently matches nothing (no error, just an empty
+            // result) instead of failing loudly. Fetching broader and filtering here in JS lets us
+            // both get correct results AND see the real values via the debug log below.
             const query = `
                 query($account: String!) {
                     tradeActions(
-                        where: {
-                            account_eq: $account
-                            orderType_in: [${ORDER_TYPE_LIMIT_DECREASE}, ${ORDER_TYPE_STOP_LOSS_DECREASE}]
-                            eventName_in: ["OrderCreated", "OrderExecuted", "OrderCancelled"]
-                        }
+                        where: { account_eq: $account }
                         orderBy: timestamp_DESC
                         limit: 400
                     ) {
@@ -2042,7 +2043,14 @@
                     return null; // signals "couldn't read from chain", caller keeps its own fallback
                 }
                 if (!res.ok || !json) return null;
-                const actions = json.data?.tradeActions || [];
+                const allActions = json.data?.tradeActions || [];
+                // TEMP DEBUG — shows the real, raw eventName/orderType values GMX actually
+                // returns, so we can confirm our filtering below matches reality.
+                console.log('[GMX][TP/SL debug] Всего tradeActions для аккаунта:', allActions.length, allActions);
+
+                const actions = allActions.filter(a =>
+                    (a.orderType === ORDER_TYPE_LIMIT_DECREASE || a.orderType === ORDER_TYPE_STOP_LOSS_DECREASE)
+                );
 
                 const closedKeys = new Set(
                     actions.filter(a => a.eventName === 'OrderExecuted' || a.eventName === 'OrderCancelled').map(a => a.orderKey)
