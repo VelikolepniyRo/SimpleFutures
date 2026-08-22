@@ -2008,6 +2008,7 @@
         // TP/SL order type, then every OrderExecuted/OrderCancelled, and an order counts as active
         // only if its orderKey never shows up in the second set.
         async function fetchActiveTriggerOrders(account) {
+            console.log('[GMX][TP/SL debug] fetchActiveTriggerOrders вызвана с account =', JSON.stringify(account));
             // account_eq confirmed correct against GMX's own official documented example query
             // (docs.gmx.io/docs/api/integration-guide/ — "Read historical trade activity"):
             //   tradeActions(where: { account_eq: $account }, limit: 50, orderBy: timestamp_DESC)
@@ -2030,19 +2031,35 @@
                     }
                 }`;
             try {
-                const res = await fetch(GMX_SUBSQUID_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ query, variables: { account: account.toLowerCase() } })
-                });
-                let json = null;
-                try { json = await res.json(); } catch (parseErr) { /* not JSON */ }
+                // Try both address casings in parallel — if this endpoint's account_eq is
+                // case-sensitive (stored checksummed, not lowercased) our usual .toLowerCase()
+                // would silently match nothing. Whichever form actually returns data wins.
+                const fetchWith = async (acct) => {
+                    const res = await fetch(GMX_SUBSQUID_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ query, variables: { account: acct } })
+                    });
+                    let json = null;
+                    try { json = await res.json(); } catch (parseErr) { /* not JSON */ }
+                    return { json, ok: res.ok };
+                };
+                const [lower, asIs] = await Promise.all([
+                    fetchWith(account.toLowerCase()),
+                    fetchWith(account)
+                ]);
+                console.log('[GMX][TP/SL debug] С lowercase адресом найдено:', lower.json?.data?.tradeActions?.length ?? '(ошибка)', '| С исходным регистром найдено:', asIs.json?.data?.tradeActions?.length ?? '(ошибка)');
+
+                const lowerCount = lower.json?.data?.tradeActions?.length || 0;
+                const asIsCount = asIs.json?.data?.tradeActions?.length || 0;
+                const { json } = asIsCount >= lowerCount ? asIs : lower;
+
                 if (json && json.errors && json.errors.length) {
                     console.warn('[GMX] Запрос активных TP/SL отклонён GraphQL-сервером:', json.errors);
                     debugDumpTradeActionSchema('TradeAction');
                     return null; // signals "couldn't read from chain", caller keeps its own fallback
                 }
-                if (!res.ok || !json) return null;
+                if (!json) return null;
                 const allActions = json.data?.tradeActions || [];
                 // TEMP DEBUG — shows the real, raw eventName/orderType values GMX actually
                 // returns, so we can confirm our filtering below matches reality.
