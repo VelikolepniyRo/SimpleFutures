@@ -2333,6 +2333,18 @@
                 // old client-side values already in knownRealTpSl are left untouched instead of
                 // being wiped — better a possibly-stale number than a blank one.
                 const activeOrders = await fetchActiveTriggerOrders(userAddress);
+                // TEMP DEBUG — remove once TP/SL display is confirmed working. Shows exactly what
+                // GMX returned and, for each one, whether it matched a known market/symbol.
+                if (activeOrders) {
+                    console.log('[GMX][TP/SL debug] Активных ордеров получено:', activeOrders.length, activeOrders);
+                    activeOrders.forEach(o => {
+                        const mAddr = (o.marketAddress || '').toLowerCase();
+                        const sym = marketToSymbol[mAddr];
+                        console.log('[GMX][TP/SL debug] ордер:', { orderType: o.orderType, isLong: o.isLong, marketAddress: mAddr, triggerPrice: o.triggerPrice, resolvedSymbol: sym || '(НЕ НАЙДЕН в marketToSymbol!)' });
+                    });
+                } else {
+                    console.log('[GMX][TP/SL debug] fetchActiveTriggerOrders вернул null (запрос не удался).');
+                }
                 if (activeOrders) {
                     activeOrders.forEach(o => {
                         const marketAddr2 = (o.marketAddress || '').toLowerCase();
